@@ -37,7 +37,7 @@ git commit -m "<your-message-here>"
 git push
 ```
 
-**To pull the code from GitHub (Always do this before you start on your feature):**
+**To pull the code from GitHub (Always do this before you start working on your feature):**
 ```
 git pull
 ```
