@@ -3,14 +3,14 @@ Development of A Personal Inventory Management System using Python
 
 ## Table of Contents
 - [CSC1024 - Assignment](# CSC1024 - Assignment)
--- [Table of Contents](## Table of Contents)
--- [Getting Started](## Getting Started)
---- [Cloning the Repo](## Cloning the Repo)
---- [Creating a New Branch](## Creating a New Branch via VSCode)
---- [Switching Back to Main Branch](## Switching Back to Main Branch)
---- [Opening a Pull Request](## Opening a Pull Request)
--- [Comments](## Comments)
--- [Error Handling](## Error Handling)
+  - [Table of Contents](## Table of Contents)
+  - [Getting Started](## Getting Started)
+    - [Cloning the Repo](## Cloning the Repo)
+    - [Creating a New Branch](## Creating a New Branch via VSCode)
+    - [Switching Back to Main Branch](## Switching Back to Main Branch)
+    - [Opening a Pull Request](## Opening a Pull Request)
+  - [Comments](## Comments)
+  - [Error Handling](## Error Handling)
 
 ## Getting Started
 To start, make sure you have [Git](https://git-scm.com/) installed on your computer. You do not need to install the GitHub Desktop app.
