@@ -19,7 +19,7 @@ To start, make sure you have [Git](https://git-scm.com/) installed on your compu
 ## Cloning the Repo
 Find a suitable folder you want your project in and clone the repo by running: 
 ```
-git clone https://github.com/Spimy/CSC1024-Assignment.git
+git clone https://github.com/Adiwert/CSC1024_Group_Assignement_IMS.git
 ```
 This will download the repo to your computer.
 
