@@ -6,7 +6,7 @@ Development of Personal Inventory Management System using Python
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
     - [Cloning the Repo](#cloning-the-repo)
-    - [Creating a New Branch](#creating-a-new-branch-via-vscode)
+    - [Creating a New Branch](#creating-a-new-branch)
     - [Switching Back to Main Branch](#switching-back-to-main-branch)
     - [Opening a Pull Request](#opening-a-pull-request)
   - [Comments](#comments)
@@ -26,13 +26,14 @@ This will download the repo to your computer.
 **IMPORTANT**: Before adding new features to the project, please make sure to create a new branch for that feature! This is to ensure there are no conflicts when merging code while working in a group.
 *For more information on what a branch is, please check the [official Git documentation](https://git-scm.com/docs/user-manual#what-is-a-branch).*
 
-To create a New Branch: 
+**Create a New Branch via VSCode**
+In case anyone is working on the same branch as you to help you out on your task, please make sure to always push your code to the repo before calling it a day. Similarly, before you start working on your task again, always pull your code from the repo. This also applies to whoever is helping out on your task.
+
+**To switch to your own branch:**
 ```
-git checkout -b <branch_name>
+git checkout <branch_name>
 ```
 
-## Create a New Branch via VSCode
-In case anyone is working on the same branch as you to help you out on your task, please make sure to always push your code to the repo before calling it a day. Similarly, before you start working on your task again, always pull your code from the repo. This also applies to whoever is helping out on your task.
 
 ## Switching Back to Main Branch
 Generally, you should only need to do this after you are done working on your own branch and after your branch has been merged with the main branch.
