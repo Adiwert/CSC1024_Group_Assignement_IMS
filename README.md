@@ -30,6 +30,11 @@ This will download the repo to your computer.
 ## Push and Pull Your Code
 In case anyone is working on the same branch as you to help you out on your task, please make sure to always **push** your code to the repo before calling it a day. Similarly, before you start working on your task again, always **pull** your code from the repo. This also applies to whoever is helping out on your task.
 
+**To switch to your own branch:**
+```
+git checkout <branch_name>
+```
+
 **To push your code to GitHub:**
 ```
 git add .
@@ -40,11 +45,6 @@ git push
 **To pull the code from GitHub (Always do this before you start working on your feature):**
 ```
 git pull
-```
-
-**To switch to your own branch:**
-```
-git checkout <branch_name>
 ```
 
 ## Switching Back to Main Branch
