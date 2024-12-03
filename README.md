@@ -4,9 +4,9 @@ Development of Personal Inventory Management System using Python
 ## Table of Contents
 - [CSC1024 - Assignment](#csc1024---assignment)
   - [Table of Contents](##table-of-contents)
-  - [Getting Started](## Getting Started)
-    - [Cloning the Repo](## Cloning the Repo)
-    - [Creating a New Branch](## Creating a New Branch via VSCode)
+  - [Getting Started](##getting-tarted)
+    - [Cloning the Repo](##cloning-the-repo)
+    - [Creating a New Branch](##creating-a-new-branch-via-vscode)
     - [Switching Back to Main Branch](## Switching Back to Main Branch)
     - [Opening a Pull Request](## Opening a Pull Request)
   - [Comments](## Comments)
