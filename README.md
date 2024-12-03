@@ -6,7 +6,8 @@ Development of Personal Inventory Management System using Python
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
     - [Cloning the Repo](#cloning-the-repo)
-    - [Creating a New Branch](#creating-a-new-branch)
+    - [Branches](#branches)
+    - [Push and Pull Your Code](#push-and-pull-your-code)
     - [Switching Back to Main Branch](#switching-back-to-main-branch)
     - [Opening a Pull Request](#opening-a-pull-request)
   - [Comments](#comments)
@@ -22,18 +23,29 @@ git clone https://github.com/Spimy/CSC1024-Assignment.git
 ```
 This will download the repo to your computer.
 
-## Creating a New Branch
-**IMPORTANT**: Before adding new features to the project, please make sure to create a new branch for that feature! This is to ensure there are no conflicts when merging code while working in a group.
+## Branches
+**IMPORTANT**: Before adding new features to the project, please make sure to switch to your own branch for that feature! This is to ensure there are no conflicts when merging code while working in a group.
 *For more information on what a branch is, please check the [official Git documentation](https://git-scm.com/docs/user-manual#what-is-a-branch).*
 
-**Create a New Branch via VSCode**
-In case anyone is working on the same branch as you to help you out on your task, please make sure to always push your code to the repo before calling it a day. Similarly, before you start working on your task again, always pull your code from the repo. This also applies to whoever is helping out on your task.
+## Push and Pull Your Code
+In case anyone is working on the same branch as you to help you out on your task, please make sure to always **push** your code to the repo before calling it a day. Similarly, before you start working on your task again, always **pull** your code from the repo. This also applies to whoever is helping out on your task.
+
+**To push your code to GitHub:**
+```
+git add .
+git commit -m "<your-message-here>"
+git push
+```
+
+**To pull the code from GitHub (Always do this before you start on your feature):**
+```
+git pull
+```
 
 **To switch to your own branch:**
 ```
 git checkout <branch_name>
 ```
-
 
 ## Switching Back to Main Branch
 Generally, you should only need to do this after you are done working on your own branch and after your branch has been merged with the main branch.
