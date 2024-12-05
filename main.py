@@ -1,10 +1,96 @@
 def add_product():
     # Code to add a product to products.txt
-    pass
+    products = []
+    table_header = f"{'ID':<10}{'Name':<20}{'Price':<10}{'Desccription':<40}\n"
+    table_header += '-' * 80 + '\n'
+    
+    with open('products.txt', 'w') as f:
+        f.write(table_header)
+        print('Enter product details or "done" to exit: ')
+
+        while True:
+            try:
+                product_id = input('Product ID: ')
+                if product_id.lower().strip() == 'done':
+                    break
+                product_name = input('Product Name: ')
+                product_price = float(input('Product Price: '))
+                product_desc = input('Product Description: ')
+
+                product = {
+                    'ID': product_id,
+                    'Name': product_name,
+                    'Price': product_price,
+                    'Description': product_desc
+                }
+
+                products.append(product)
+
+                table = f'{product_id:<10}{product_name:<20}{product_price:<10}{product_desc:<40}\n'
+                f.write(table)
+                print('Product added \n')
+
+            except ValueError:
+                print('Please check the details for typo.')
+                return
+
 
 def update_product():
-    # Code to update product details
-    pass
+    # Code to update product details:
+    products = []
+
+    try:
+        with open('products.txt','r') as f:
+            lines = f.readlines()
+
+        for line in lines[2:]:
+            if line.strip():
+                product_id = line[:10].strip()
+                product_name = line[10:30].strip()
+                product_price = line[30:40].strip()
+                product_description = line[40:].strip()
+
+                product = {
+                    'ID': product_id,
+                    'Name': product_name,
+                    'Price': float(product_price) if product_price else 0,
+                    'Description': product_description
+                }
+                products.append(product)
+
+    except FileNotFoundError:
+        print("No products file found. Please add products first.")
+        return
+            
+    product_id = input('\nEnter product ID to update: ').strip().lower()
+    for product in products:
+        if product ['ID'].lower() == product_id:
+            print('Current Product Details: ')
+            print(f"Name: {product['Name']}, Price: {product['Price']}, Description: {product['Description']}")
+
+            product['Name'] = input('Enter new Product Name (skip if no updates): ')
+            try:
+                price_input = input('Enter new Product Price (skip if no updates): ')
+                if price_input:
+                    product['Price'] = float(price_input)
+            except ValueError:
+                print('Enter a valid price')
+            product['Description'] = input('Enter new Product Description (skip if no updates): ')
+
+            print('Succesfully Updated Product')
+            break
+    else:
+        print('Invalid Product ID')
+        return
+    
+    with open('products.txt', 'w') as f:
+        table_header = f"{'ID':<10}{'Name':<20}{'Price':<10}{'Description':<40}\n"
+        table_header += "-" * 80 + "\n"
+        f.write(table_header)
+        for product in products:
+            table = f"{product['ID']:<10}{product['Name']:<20}{product['Price']:<10}{product['Description']:<40}\n"
+            f.write(table)
+
 
 def add_supplier():
     # Code to add a supplier to suppliers.txt
@@ -51,3 +137,5 @@ def main_menu():
             break
         else:
             print("Invalid choice. Please try again.")
+
+main_menu()
