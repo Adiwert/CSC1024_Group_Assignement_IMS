@@ -82,12 +82,15 @@ In the terminal, run:
 git checkout <your-branch-name>
 git fetch origin
 git merge origin/main
+```
+You should see all the updates from the main branch in your own branch now. Do some edit on your VSCode right now.
+After all your effort, run the following command to push your changes to GitHub.
+```
 git add .
 git commit -m "<your-message-here>"
 git push
 ```
-
-Your should see all the updates from the main branch in your own branch now.
+You should see all the change you made in your branch on GitHub now.
 
 ## Comments
 
