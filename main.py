@@ -2,8 +2,17 @@ def add_product():
     # Code to add a product to products.txt
     pass
 
-def update_product():
+def update_product(): ## always check the sticky notes 
     # Code to update product details
+    for product in products:
+        if product['name'] == name:
+            new_price = float(input(f"Enter new price for '{name}':"))
+            new_quantity = int(input(f"ENter new quantity for '{name}':"))
+
+            product['price'] = new_price
+            product['quantity'] = new_quantity
+
+            print(f"Product '{name}' not found.")
     pass
 
 def add_supplier():
