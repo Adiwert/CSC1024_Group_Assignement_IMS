@@ -4,15 +4,59 @@ def add_product():
 
 def update_product(): ## always check the sticky notes 
     # Code to update product details
+    product = []
+    try:
+        with open('product.txt', 'r') as f:
+            lines = f.readlines()
+            for line in lines[2:]: # this step to skip header lines
+                parts = lines.split('I')
+                if len(parts) >= 4:
+                    product = {
+                        'ID': parts[0].strip(),
+                        'Name': parts[1].strip(),
+                        'Price': float(parts[2].strip()),
+                        'Description': parts[3].strip()
+                    }
+                    products.append(product)
+    except FileNotFoundError:
+        print("No products found! Please add a product first. Thank you")
+        return
+    
+    print("Current products: ")
     for product in products:
-        if product['name'] == name:
-            new_price = float(input(f"Enter new price for '{name}':"))
-            new_quantity = int(input(f"ENter new quantity for '{name}':"))
+        print(f"{product['ID']:<10}{product['Name']:<20}{product["price"]:<10}{product['Description']:<40}")
+        # to update some specific
+        product_id_to_update = input("Please enter the Product ID to update: ")
 
-            product['price'] = new_price
-            product['quantity'] = new_quantity
+        for product in products:
+            if product['ID'] == product_id_to_update:
+                try:
+                    new_name = input(f"Enter new name for '{product['Name']}'(or leave blank to keep the current name):") or product['Name']
+                    new_price = input(f"Enter new price for '{product['Name']}'(or leave blank to keep the current price):") 
+                    new_description = input(f"Enter new description for '{product['Name']}'(or leave blank to keep the current description):") or product['Description']
 
-            print(f"Product '{name}' not found.")
+                    # product detail updated
+                    product['Name'] = new_name
+                    product['Price'] = new_price
+                    product['Description'] = new_description
+
+                    print(f"Product '{product_id_to_update}' are updated successfully.")
+                except ValueError: 
+                    print("Invalid price entered. Update failed. ")
+                break
+            else:
+                print(f"Product ID '{product_id_to_update}' are not found. ")
+
+                # writing the updated products into the file
+                with open('products.txt', 'w') as f:
+                    table_header = f"{'ID':<10}{'Name':<20}{'Price':<10}{'Description':<40}\n"
+                    table_header += '-' * 80 + '\n'
+                    f.write(table_header)
+
+                    for p in products:
+                        table_row = f"{p['ID']:<10}{p['Name']:<20}{p['Price']:<10}{p['Description']:<40}\n"
+            f.write(table_row)
+
     pass
 
 def add_supplier():
