@@ -4,58 +4,7 @@ def add_product():
 
 def update_product(): ## always check the sticky notes 
     # Code to update product details
-    product = []
-    try:
-        with open('product.txt', 'r') as f:
-            lines = f.readlines()
-            for line in lines[2:]: # this step to skip header lines
-                parts = lines.split('I')
-                if len(parts) >= 4:
-                    product = {
-                        'ID': parts[0].strip(),
-                        'Name': parts[1].strip(),
-                        'Price': float(parts[2].strip()),
-                        'Description': parts[3].strip()
-                    }
-                    products.append(product)
-    except FileNotFoundError:
-        print("No products found! Please add a product first. Thank you")
-        return
-    
-    print("Current products: ")
-    for product in products:
-        print(f"{product['ID']:<10}{product['Name']:<20}{product["price"]:<10}{product['Description']:<40}")
-        # to update some specific
-        product_id_to_update = input("Please enter the Product ID to update: ")
-
-        for product in products:
-            if product['ID'] == product_id_to_update:
-                try:
-                    new_name = input(f"Enter new name for '{product['Name']}'(or leave blank to keep the current name):") or product['Name']
-                    new_price = input(f"Enter new price for '{product['Name']}'(or leave blank to keep the current price):") 
-                    new_description = input(f"Enter new description for '{product['Name']}'(or leave blank to keep the current description):") or product['Description']
-
-                    # product detail updated
-                    product['Name'] = new_name
-                    product['Price'] = new_price
-                    product['Description'] = new_description
-
-                    print(f"Product '{product_id_to_update}' are updated successfully.")
-                except ValueError: 
-                    print("Invalid price entered. Update failed. ")
-                break
-            else:
-                print(f"Product ID '{product_id_to_update}' are not found. ")
-
-                # writing the updated products into the file
-                with open('products.txt', 'w') as f:
-                    table_header = f"{'ID':<10}{'Name':<20}{'Price':<10}{'Description':<40}\n"
-                    table_header += '-' * 80 + '\n'
-                    f.write(table_header)
-
-                    for p in products:
-                        table_row = f"{p['ID']:<10}{p['Name']:<20}{p['Price']:<10}{p['Description']:<40}\n"
-            f.write(table_row)
+   
 
     pass
 
@@ -68,11 +17,53 @@ def place_order():
     pass
 
 def view_inventory():
-    # Code to view inventory
+    try:
+        with open("product.txt",'r') as file:
+            lines = file.readlines()
+
+            if len(lines) <= 2:
+                print("The inventory is currently empty. Add some products first")
+                return
+
+            print("\n-- Inventroy List --\n")
+            for line in lines:
+                print(line, end="")
+            print("\n-------------------")
+
+    except FileNotFoundError:
+        print("\nError: The file does not exist. add product to create the file ")
+
     pass
 
 def generate_reports():
     # Code to generate reports
+    try:
+        with open("product.txt",'r') as file :
+            lines = file.readlines()
+
+            if len(lines) <=2:
+                print("\nThe inventory is empty. Report are unable to be generated")
+                return
+
+                total_product = 0
+                total_value = 0.0
+
+                for line in lines[2:]:
+                    if line.strip():
+                        total_product += 1
+                        price = float(line[30:40].strip())
+                        total_value += price
+
+                print("\n-- Inventory Report --\n")
+                print(f"The total products: {total_product}")
+                print(f"The total value of products: {total_value:.2f}")
+           
+    except FileNotFoundError:
+                print("\nError: the product does not exist. Add the product first\n")
+           
+    except FileNotFoundError:
+                print("Invalid input. Try again")
+                
     pass
 
 def main_menu():
