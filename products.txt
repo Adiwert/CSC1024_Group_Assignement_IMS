@@ -1,0 +1,21 @@
+P0001, Lababa Chocolate, Snack, 200, 4.50, 5.50, S0001
+P0002, PowerGan, Beverages, 250, 3.50, 4.00, S0002
+P0003, Yumz Strawberry, Fruits, 340, 10.50, 11.50, S0003
+P0004, Roti Lazat Nana, Pastry, 100, 2.50, 3.00, S0004
+P0005, Broccoli Pahang, Vegetables, 80, 4.50, 4.90, S0005
+P0006, ABZ Seafood, Seafood, 100, 15.50, 17.50, S0006
+P0007, CZY Fresh Corn, Fruits, 100, 3.50, 4.00, S0007
+P0008, Whitey Fruit Scone, Pastry, 200, 8.50, 10.00, S0003
+P0009, Whitey Ginger Bread, Pastry, 150, 4.50, 5.50, S0003
+P0010, Roze Ice Cream, Snack, 40, 4.50, 4.80, S0006
+P0011, Chocolatey Ice Cream, Snack, 40, 5.50, 5.80, S0006
+P0012, Ahmet Healthy Grains, Grains, 30, 45.50, 50.50, S0008
+P0013, Ahmet Bakao Rice, Grains, 30, 25.50, 30.50, S0008
+P0014, Minnie Waffle Ice Cream, Snack, 40, 6.50, 6.80, S0006
+P0015, Kura Mura Chicken Nugget, Frozen, 50, 12.50, 13.00, S0009
+P0016, Kura Mura Fish Nugget, Frozen, 50, 10.50, 11.00, S0009
+P0017, Kura Mura Crab Stick, Frozen, 35, 5.50, 6.00, S0009
+P0018, Yumz Orange, Fruits, 200, 6.50, 7.00, S0003
+P0019, Yumz Kiwi, Fruits, 200, 4.00, 4.50, S0003
+P0020, Finx Energy Drink, Beverages, 200, 4.80, 5.20, S0010
+P0021, Finx Matcha Milk, Beverages, 100, 7.20, 7.80, S0010
