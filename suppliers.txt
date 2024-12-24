@@ -1,0 +1,2 @@
+S0001, Happy_Bakery, bakery, 012-3456789
+S0002, Jaya_Grocer, fruits, 013-2220943
