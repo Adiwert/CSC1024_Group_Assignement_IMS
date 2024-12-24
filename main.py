@@ -95,4 +95,3 @@ def main_menu():
             break
         else:
             print("Invalid choice. Please try again.")
-            print("Hello world!")
