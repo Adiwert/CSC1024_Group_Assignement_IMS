@@ -116,33 +116,34 @@ def main():
 
   =====================================================
     """)
-    print("\nInventory Management System")
-    print("1. Add a New Product")
-    print("2. Update Product Details")
-    print("3. Add a New Supplier")
-    print("4. Place an Order")
-    print("5. View Inventory")
-    print("6. Generate Reports")
-    print("7. Exit")
+    while True:
+        print("\nInventory Management System")
+        print("1. Add a New Product")
+        print("2. Update Product Details")
+        print("3. Add a New Supplier")
+        print("4. Place an Order")
+        print("5. View Inventory")
+        print("6. Generate Reports")
+        print("7. Exit")
 
-    choice = input("Enter your choice: ")
-    if choice == '1':
-        add_product()
-    elif choice == '2':
-        update_product()
-    elif choice == '3':
-        add_supplier()
-    elif choice == '4':
-        place_order()
-    elif choice == '5':
-        view_inventory()
-    elif choice == '6':
-        generate_reports()
-    elif choice == '7':
-        print("Exiting program...")
-        break
-    else:
-        print("Invalid choice. Please try again.")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            add_product()
+        elif choice == '2':
+            update_product()
+        elif choice == '3':
+            add_supplier()
+        elif choice == '4':
+            place_order()
+        elif choice == '5':
+            view_inventory()
+        elif choice == '6':
+            generate_reports()
+        elif choice == '7':
+            print("Exiting program...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
             
 if __name__ == "__main__":
     main()
