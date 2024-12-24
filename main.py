@@ -1,3 +1,5 @@
+import datetime # add date and time
+
 def add_product():
     # Code to add a product to products.txt
     pass
@@ -8,12 +10,23 @@ def update_product():
 
 def add_supplier():
     # Code to add a supplier to suppliers.txt
-    suppliers = []
-    table_header = f"{'Suppliers Name':<20}{'Contact Info':<30}{'Product Category':<40}\n"
-    table_header += '-' * 90 + '\n'
-
-    with open('suplliers.txt', 'w') as f:
-        f.write(table_header)
+    # Load existing suppliers (optional, for validation or display purposes)
+    suppliers = {}
+    try:
+        with open('suppliers.txt', 'r') as f:
+            for line in f:
+                parts = line.strip().split(',')
+                if len(parts) == 3:  # Assuming format: SupplierID,SupplierName,ContactDetails
+                    supplier_id, name, contact_info = parts[0], parts[1], parts[2]
+                    suppliers[supplier_id] = {'Name': name, 'Contact Info': contact_info}
+    except FileNotFoundError:
+        print("suppliers.txt not found. Starting with an empty supplier list.")
+    except Exception as e:
+        print(f"Error reading suppliers.txt: {e}")
+        return
+    
+    # Add new suppliers
+    with open('suplliers.txt', 'a') as f: # Append mode
         print('Enter supplier details or "done" to exit the:\n')
 
         while True:
@@ -32,28 +45,21 @@ def add_supplier():
                     print ("Contact info cannot be empty. Please try again.")
                     continue
 
-                # Validate product supplied
-                product_category = input('Product Catgory: ').strip()
-                if not product_category:
-                    print("Product category cannot be empty. Please try again.")
-                    continue
+                # Generate a new Supplier ID
+                new_supplier_id = f"S{len(suppliers) + 1:04d}"  # Example: S0001, S0002
 
-                # Append to list and file
-                supplier = {
-                    'Name': supplier_name,
-                    'Contact Info': contact_info,
-                    'Product Category': product_category
-                } 
+                # Append to file
+                supplier_entry = f"{new_supplier_id},{supplier_name},{contact_info}\n"
+                f.write(supplier_entry)
 
-                suppliers.append(supplier)
+                # Update in-memory list
+                suppliers[new_supplier_id] = {'Name': supplier_name, 'Contact Info': contact_info}
 
-                table = f"{supplier_name:<20}{contact_info:<30}{product_category:<40}\n"
-                f.write(table)
-                print('supplier added\n')
+                print(f"Supplier added successfully:\n"
+                      f"Supplier ID: {new_supplier_id}\nName: {supplier_name}\nContact Info: {contact_info}\n")
+                
             except Exception as e:
                 print(f"An error occured: {e}")
-
-    pass
 
 def place_order():
     # Code to place an order
@@ -72,65 +78,81 @@ def place_order():
         print(f"Error reading products.txt: {e}")
         return
     
-    # Prepare orders.txt with updated details
-    orders = []
-    table_header = f"{'Product Name':<20}{'Quantity':<10}{'Supplier Name':<20}{'Quantity Change':<15}\n"
-    table_header += '-' * 60 + '\n'
+    # Load supplier data from suppliers.txt
+    suppliers = {}
+    try:
+        with open('suppliers.txt', 'r') as sup_file:
+            for line in sup_file:
+                parts = line.strip().split(',')
+                if len(parts) == 3:  # Format: SupplierID,SupplierName,ContactDetails
+                    supplier_id, supplier_name, contact = parts[0], parts[1], parts[2]
+                    suppliers[supplier_id] = {'SupplierName': supplier_name, 'ContactDetails': contact}
+    except FileNotFoundError:
+        print("suppliers.txt not found. Starting with an empty supplier list.")
+        return
+    except Exception as e:
+        print(f"Error reading suppliers.txt: {e}")
+        return
+    
+    # Append new orders to orders.txt
+    try:
+        with open('orders.txt', 'a') as f:
+            print('Enter order details or "done" to exit:\n')
 
-    with open('orders.txt','w') as f:
-        f.write(table_header)
-        print('Enter order details or "done" ro exit:\n')
+            while True:
+                try:
+                    # Validate Product ID
+                    product_id = input('Product ID: ').strip()
+                    if product_id.lower() == 'done':
+                        break
+                    if product_id not in product_stock:
+                        print("Invalid Product ID. Please try again.")
+                        continue
 
-        while True:
-            try:
-                # Validate product name
-                product_name = input('Product Name: ').strip()
-                if product_name.lower() == 'done':
-                    break
-                if not product_name:
-                    print("Product name cannot be empty. Please try again.")
-                    continue
+                    # Validate Quantity
+                    quantity = input('Quantity: ').strip()
+                    if not quantity.isdigit() or int(quantity) <= 0:
+                        print("Quantity must be a valid positive number. Please try again.")
+                        continue
+                    quantity = int(quantity)
 
-                # Validate quantity
-                quantity = input('Quantity: ').strip()
-                if not quantity.isdigit() or int(quantity) <= 0:
-                    print("Quantity must be a valid number. Please try again.")
-                    continue
-                quantity = int(quantity)
+                    # Validate Supplier ID
+                    supplier_id = input('Supplier ID: ').strip()
+                    if supplier_id not in suppliers:
+                        print("Invalid Supplier ID. Please try again.")
+                        continue
 
-                # Validate supplier name
-                supplier_name = input('Supplier Name: ').strip()
-                if not supplier_name:
-                    print("Supplier name cannot be empty. Please try again.")
-                    continue
+                    # Calculate Quantity Change from products.txt data
+                    previous_quantity = product_stock.get(product_name, 0)  # Default to 0 if not present
+                    quantity_change = quantity - previous_quantity
+                    product_stock[product_name] = quantity  # Update stock for future calculations
 
-                # Calculate Quantity Change from products.txt data
-                previous_quantity = product_stock.get(product_name, 0)  # Default to 0 if not present
-                quantity_change = quantity - previous_quantity
-                product_stock[product_name] = quantity  # Update stock for future calculations
+                    # Generate Order ID and Order Date
+                    order_id = f"O{len(product_stock):04d}"  # Example: O0001, O0002
+                    order_date = datetime.datetime.now().strftime('%Y-%m-%d')
 
-                # Append to list and file
-                order = {
-                    'Product Name': product_name,
-                    'Quantity': quantity,
-                    'Supplier Name': supplier_name,
-                    'Quantity Change': quantity_change
-                }
+                    # Write to orders.txt
+                    order_entry = f"{order_id},{product_id},{quantity},{order_date},{supplier_id}\n"
+                    f.write(order_entry)
 
-                orders.append(order)
+                    # Display confirmation
+                    print(f"Order placed successfully:\n"
+                          f"Order ID: {order_id}\nProduct: {product_stock[product_id]['ProductName']}\n"
+                          f"Quantity: {quantity}\nQuantity Change: {quantity_change}\n"
+                          f"Supplier: {suppliers[supplier_id]['SupplierName']}\nDate: {order_date}\n")
+                except Exception as e:
+                    print(f"An error occurred while placing the order: {e}")
+    except FileNotFoundError:
+        print("orders.txt not found. Creating a new file...")
+        open('orders.txt', 'w').close()
+    except Exception as e:
+        print(f"Error accessing orders.txt: {e}")
 
-                table = f"{product_name:<20}{quantity:<10}{supplier_name:<20}{quantity_change:<15}\n"
-                f.write(table)
-                print('Order placed\n')
-
-            except Exception as e:
-                print(f"An error occured: {e}")
-            
     # Update products.txt with the new quantities
     try:
         with open('products.txt', 'w') as prod_file:
-            for product, quantity in product_stock.items():
-                prod_file.write(f"{product},{quantity}\n")
+            for product_id, details in product_stock.items():
+                prod_file.write(f"{product_id},{details['ProductName']},{details['Quantity']}\n")
     except Exception as e:
         print(f"Error updating products.txt: {e}")
 
