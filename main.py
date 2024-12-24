@@ -18,7 +18,7 @@ def place_order():
 
 def view_inventory():
     try:
-        with open("product.txt",'r') as file:
+        with open("products.txt",'r') as file:
             lines = file.readlines()
 
             if len(lines) <= 2:
@@ -35,28 +35,63 @@ def view_inventory():
 
     pass
 
+
+from prettytable import PrettyTable
+
 def generate_reports():
     # Code to generate reports
     try:
-        with open("product.txt",'r') as file :
+        with open("products.txt",'r') as file :
             lines = file.readlines()
 
             if len(lines) <=2:
                 print("\nThe inventory is empty. Report are unable to be generated")
-                return
+                return 
 
-                total_product = 0
-                total_value = 0.0
+            total_product = 0
+            total_value = 0.0
+            low_stock = 20
+            low_stock = []
+            supplier_order = []
 
-                for line in lines[2:]:
+            table = PrettyTable()
+            table.field_names = ["Product ID","Product Name","Price","Quantity"]
+
+
+            for line in lines[2:]:
                     if line.strip():
+                        product_id = line[0:10].strip()
+                        product_name = line[10:30].strip()
+                        quantity = int(line[30:35].strip())
+                        price = float(line[35:45].strip())
                         total_product += 1
-                        price = float(line[30:40].strip())
-                        total_value += price
+                        
+                        total_value += price * quantity
 
-                print("\n-- Inventory Report --\n")
-                print(f"The total products: {total_product}")
-                print(f"The total value of products: {total_value:.2f}")
+                        table.add_row([product_id, product_name, quantity, f"${price:.2f}"])
+
+                        if quantity < low_stock:
+                            low_stock.append(product_name)
+                            supplier_order.append ((product_name, low_stock - quantity))
+
+            print("\n-- Inventory Report --\n")
+            print(table)
+            print(f"The total products: {total_product}")
+            print(f"The total value of products: {total_value:.2f}")
+
+            if low_stock:
+                    print("\n-- Low Stock! --")
+                    print("The products that are low stock: ")
+                    for product in low_stock:
+                        print(f"-{product}")
+
+            if supplier_order :
+                    print("\n-- Supplier Order --")
+                    print("\n Products that need to be ordered:")
+                    for product, order_quantity in supplier_order:
+                        print(f" -{product}: Order {order_quantity} more units")
+
+                
            
     except FileNotFoundError:
                 print("\nError: the product does not exist. Add the product first\n")
