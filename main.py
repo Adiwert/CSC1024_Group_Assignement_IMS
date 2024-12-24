@@ -1,7 +1,5 @@
 from prettytable import PrettyTable 
 
-from prettytable import PrettyTable 
-
 def add_product():
     print(r"""
          _       _     _   ____                _            _   
