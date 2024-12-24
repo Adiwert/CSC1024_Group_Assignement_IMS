@@ -57,8 +57,24 @@ def add_supplier():
 
 def place_order():
     # Code to place an order
+    # Load product data from products.txt
+    product_stock = {}
+    try:
+        with open('products.txt', 'r') as prod_file:
+            for line in prod_file:
+                parts = line.strip().split(',')
+                if len(parts) == 2:  # Assuming the file format is "ProductName,Quantity"
+                    product_name, quantity = parts[0].strip(), parts[1].strip()
+                    product_stock[product_name] = int(quantity)
+    except FileNotFoundError:
+        print("products.txt not found. Starting with an empty stock.")
+    except Exception as e:
+        print(f"Error reading products.txt: {e}")
+        return
+    
+    # Prepare orders.txt with updated details
     orders = []
-    table_header = f"{'Product Name':<20}{'Quantity':<10}{'Supplier Name':<20}\n"
+    table_header = f"{'Product Name':<20}{'Quantity':<10}{'Supplier Name':<20}{'Quantity Change':<15}\n"
     table_header += '-' * 60 + '\n'
 
     with open('orders.txt','w') as f:
@@ -88,21 +104,35 @@ def place_order():
                     print("Supplier name cannot be empty. Please try again.")
                     continue
 
+                # Calculate Quantity Change from products.txt data
+                previous_quantity = product_stock.get(product_name, 0)  # Default to 0 if not present
+                quantity_change = quantity - previous_quantity
+                product_stock[product_name] = quantity  # Update stock for future calculations
+
                 # Append to list and file
                 order = {
                     'Product Name': product_name,
                     'Quantity': quantity,
-                    'Supplier Name': supplier_name
+                    'Supplier Name': supplier_name,
+                    'Quantity Change': quantity_change
                 }
 
                 orders.append(order)
 
-                table = f"{product_name:<20}{quantity:<10}{supplier_name:<20}\n"
+                table = f"{product_name:<20}{quantity:<10}{supplier_name:<20}{quantity_change:<15}\n"
                 f.write(table)
                 print('Order placed\n')
+
             except Exception as e:
                 print(f"An error occured: {e}")
-    pass
+            
+    # Update products.txt with the new quantities
+    try:
+        with open('products.txt', 'w') as prod_file:
+            for product, quantity in product_stock.items():
+                prod_file.write(f"{product},{quantity}\n")
+    except Exception as e:
+        print(f"Error updating products.txt: {e}")
 
 def view_inventory():
     # Code to view inventory
