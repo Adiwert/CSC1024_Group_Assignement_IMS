@@ -1,3 +1,4 @@
+Outgoing Order ID, Incoming Order ID, Product ID, Incoming Price, Selling Price, Status, Supplier ID, Order Date
 O0001, I0001, P0001, 4.50, 5.50, -20, S0001, 12/11/2024
 O0002, I0002, P0002, 3.50, 4.00, -50, S0002, 01/12/2024
 O0003, I0003, P0003, 10.50, 11.50, +100, S0003, 13/11/2024

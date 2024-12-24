@@ -1,3 +1,4 @@
+Supplier ID, Supplier Name, Product Category, Contact Number
 S0001, Lababa Chocolate Enterprise, Snack, 082-3232112
 S0002, Ganergy Drink, Beverages, 083-3321101
 S0003, Yumz Fresh Co., Fruits, 082-5551765

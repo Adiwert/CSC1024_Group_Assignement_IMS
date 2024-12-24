@@ -1,3 +1,4 @@
+Product ID, Product Name, Product Category, Quantity, Incoming Price, Selling Price, Supplier ID
 P0001, Lababa Chocolate, Snack, 200, 4.50, 5.50, S0001
 P0002, PowerGan, Beverages, 250, 3.50, 4.00, S0002
 P0003, Yumz Strawberry, Fruits, 340, 10.50, 11.50, S0003
