@@ -1,3 +1,5 @@
+from prettytable import PrettyTable 
+
 def add_product():
     # Code to add a product to products.txt
     pass
@@ -22,7 +24,7 @@ def view_inventory():
             lines = file.readlines()
 
             if len(lines) <= 2:
-                print("The inventory is currently empty. Add some products first")
+                print("The inventory is currently empty. Add some products first.")
                 return
 
             print("\n-- Inventroy List --\n")
@@ -62,8 +64,7 @@ def generate_reports():
                 print("\nError: the product does not exist. Add the product first\n")
            
     except FileNotFoundError:
-                print("Invalid input. Try again")
-                
+                print("Invalid input. Try again")        
     pass
 
 def main_menu():
