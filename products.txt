@@ -1,0 +1,5 @@
+ID        Name                Price     Desccription                            
+--------------------------------------------------------------------------------
+D009      Mouse               89.9      Superlight                              
+D007      Monitor             129.9     1440p                                   
+D005      NZXT Prebuilt       1799.0    Trash                                   
