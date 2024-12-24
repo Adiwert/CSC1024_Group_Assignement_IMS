@@ -2,8 +2,10 @@ def add_product():
     # Code to add a product to products.txt
     pass
 
-def update_product():
+def update_product(): ## always check the sticky notes 
     # Code to update product details
+   
+
     pass
 
 def add_supplier():
@@ -15,11 +17,53 @@ def place_order():
     pass
 
 def view_inventory():
-    # Code to view inventory
+    try:
+        with open("product.txt",'r') as file:
+            lines = file.readlines()
+
+            if len(lines) <= 2:
+                print("The inventory is currently empty. Add some products first")
+                return
+
+            print("\n-- Inventroy List --\n")
+            for line in lines:
+                print(line, end="")
+            print("\n-------------------")
+
+    except FileNotFoundError:
+        print("\nError: The file does not exist. add product to create the file ")
+
     pass
 
 def generate_reports():
     # Code to generate reports
+    try:
+        with open("product.txt",'r') as file :
+            lines = file.readlines()
+
+            if len(lines) <=2:
+                print("\nThe inventory is empty. Report are unable to be generated")
+                return
+
+                total_product = 0
+                total_value = 0.0
+
+                for line in lines[2:]:
+                    if line.strip():
+                        total_product += 1
+                        price = float(line[30:40].strip())
+                        total_value += price
+
+                print("\n-- Inventory Report --\n")
+                print(f"The total products: {total_product}")
+                print(f"The total value of products: {total_value:.2f}")
+           
+    except FileNotFoundError:
+                print("\nError: the product does not exist. Add the product first\n")
+           
+    except FileNotFoundError:
+                print("Invalid input. Try again")
+                
     pass
 
 def main_menu():
