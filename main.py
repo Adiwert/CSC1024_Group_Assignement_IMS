@@ -44,7 +44,7 @@ def generate_reports():
         with open("products.txt",'r') as file :
             lines = file.readlines()
 
-            if len(lines) <=2:
+            if len(lines) <=2: #checking the inventory
                 print("\nThe inventory is empty. Report are unable to be generated")
                 return 
 
@@ -91,7 +91,21 @@ def generate_reports():
                     for product, order_quantity in supplier_order:
                         print(f" -{product}: Order {order_quantity} more units")
 
-                
+        with open("order.txt","r") as order_file, open("supplier.txt","r") as supplier_file:
+            order_line = order_file.readlines()
+            supplier_lines = supplier_file.readlines()
+
+            total_sales = sum(float(line.strip().split()[1]) for line in order_line if line.strip())
+            total_supplier_cost = sum(float(line.strip().split()[1]) for line in supplier_lines if line.strip())
+
+            profit = total_sales - total_supplier_cost
+            print(f"\n-- The profit summary --")
+            print(f"Total sales : ${total_sales:.2f}")
+            print(f"Total supplier cost : ${total_supplier_cost:.2f}")
+            print(f"Profit : ${profit:.2f}")
+            
+
+
            
     except FileNotFoundError:
                 print("\nError: the product does not exist. Add the product first\n")
