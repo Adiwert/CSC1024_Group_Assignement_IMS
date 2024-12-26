@@ -3,8 +3,8 @@ from prettytable import PrettyTable # Imports the PrettyTable library for format
 
 # Predefined food categories for the user to choose from
 PRODUCT_CATEGORIES = [
-    "Diary", "Fruits", "Vagetables", "Poultry", "Seafood", 
-    "Beverages", "Bakery", "Snacks", "Condiments", "Grains", "Others"
+    "Dairy", "Fruits", "Vagetables", "Poultry", "Seafood", 
+    "Beverages", "Bakery", "Snacks", "Frozen", "Grains", "Others"
 ]
 
 # Function to format names when append it into txt files
@@ -56,7 +56,7 @@ def add_product():
 
     if not file_exists:
         with open('products.txt', 'w') as f:
-            table_header = f"{'ProductID':<5}, {'ProductName':<25}, {'ProductCategory':<10}, {'ProductQuantity':<4}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<5}\n"
+            table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<10}\n"
             f.write(table_header)
 
     print('Enter product details or "done" to exit: ')
@@ -73,7 +73,7 @@ def add_product():
             break
     
     while True:
-        print("\nAvailable Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Condiments, Grains, Others")
+        print("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others")
         product_category = input('Product Category: ').strip().capitalize()
         if product_category.lower() == 'done':
             return None # Exit the function if the user enters "done"
@@ -85,10 +85,11 @@ def add_product():
             break
 
     while True:
+        product_quantity = input('Product Quantity: ')
+        if product_quantity.lower() == 'done':
+            return None # Exit the function if the user enters "done"
         try:
-            product_quantity = int(input('Product Quantity: '))
-            if product_quantity.lower() == 'done':
-                return None # Exit the function if the user enters "done"
+            product_quantity = int(product_quantity)
             break
         except ValueError:
             print("Invalid quantity input.")
@@ -120,7 +121,7 @@ def add_product():
             with open('suppliers.txt', 'r') as f:
                 suppliers = f.readlines()[2:]
                 for supplier in suppliers:
-                    supplier_info = supplier.split("\n")
+                    supplier_info = supplier.split(", ")
                     supplier_id = supplier_info[0] # Extract the Supplier ID
                     valid_supplier_ids.append(supplier_id) # Add the Supplier ID to the list
                     print(f"{supplier_info[0]}, {supplier_info[1]}")
@@ -139,10 +140,12 @@ def add_product():
             return None # Exit the function if there is no suppliers data available
     
     with open('products.txt', 'a') as f:
-        table = f"{'ProductID':<5}, {'ProductName':<25}, {'ProductCategory':<10}, {'ProductQuantity':<4}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<5}\n"
+        table = f"{product_id:<10}, {product_name:<25}, {product_category:<15}, {product_quantity:<15}, {product_import_price:<20}, {product_retail_price:<20}, {supplier_id:<10}\n"
         f.write(table)
         print(f'{product_name} with ID of {product_id} has been added. \n')
-    
+
+
+
 def update_product():
     print(r"""
       _   _           _       _         ____                _            _   
@@ -152,7 +155,7 @@ def update_product():
       \___/| .__/ \__,_|\__,_|\__\___| |_|   |_|  \___/ \__,_|\__,_|\___|\__|
            |_|                                                               
     """)
-    # Code to update product details:
+    # Load products
     products = []
 
     try:
