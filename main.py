@@ -2,9 +2,9 @@ import datetime # Imports the datetime module to add date/time to details.
 from prettytable import PrettyTable # Imports the PrettyTable library for formatted table output.
 
 # Predefined food categories for the user to choose from
-product_categories = [
-    "Diary", "Fruits", "Vagetables", "Poultry", "Seafood",
-    "Beverages", "Bakery", "Snacks", "Condiments", "Grains"
+PRODUCT_CATEGORIES = [
+    "Diary", "Fruits", "Vagetables", "Poultry", "Seafood", 
+    "Beverages", "Bakery", "Snacks", "Condiments", "Grains", "Others"
 ]
 
 # Function to format names when append it into txt files
@@ -18,8 +18,8 @@ def format_name(name):
 # General helper function to get the next ID for any file
 def get_next_id(file_name, prefix):
     try:
-        with open(file_name, "r") as file:
-            lines = file.readlines()
+        with open(file_name, "r") as f:
+            lines = f.readlines()
         if len(lines) <= 2:
             return f'{prefix}0001'
         
@@ -36,10 +36,6 @@ def get_next_id(file_name, prefix):
     # If the file does not exist, return the prefix followed by 0001
     except FileNotFoundError:
         return f'{prefix}0001'
-    # Catching any other exceptions
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
 
 # Defines the `add_product` function to add new products to an inventory management system.
 def add_product():
@@ -52,55 +48,101 @@ def add_product():
     
     """)
     try:
+        with open('products.txt', 'r') as f:
+            lines = f.readlines() 
+            file_exists = bool(lines)
+    except FileNotFoundError:
         file_exists = False
-        existing_id = set()
+
+    if not file_exists:
+        with open('products.txt', 'w') as f:
+            table_header = f"{'ProductID':<5}, {'ProductName':<25}, {'ProductCategory':<10}, {'ProductQuantity':<4}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<5}\n"
+            f.write(table_header)
+
+    print('Enter product details or "done" to exit: ')
+    
+    product_id = get_next_id('products.txt', 'P')
+    print(f"Product ID: {product_id}")
+    
+    while True:
+        product_name = input('Product Name: ').strip()
+        if product_name.lower() == 'done':
+            return None # Exit the function if the user enters "done"
+        formatted_name = format_name(product_name)
+        if formatted_name:
+            break
+    
+    while True:
+        print("\nAvailable Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Condiments, Grains, Others")
+        product_category = input('Product Category: ').strip().capitalize()
+        if product_category.lower() == 'done':
+            return None # Exit the function if the user enters "done"
+        if product_category not in PRODUCT_CATEGORIES:
+            print("Invalid categopory, defaulting to 'Others'")
+            product_category = 'Others'
+            break
+        else:
+            break
+
+    while True:
         try:
-            with open('products.txt', 'r') as f:
-                lines = f.readlines() 
-                file_exists = bool(lines)
-
-                for line in lines[2:]:
-                    if line.strip():
-                        existing_id.add(line[:10].strip())
-
+            product_quantity = int(input('Product Quantity: '))
+            if product_quantity.lower() == 'done':
+                return None # Exit the function if the user enters "done"
+            break
+        except ValueError:
+            print("Invalid quantity input.")
+    
+    while True:
+        product_import_price = input('Product Import Price (RM): ').strip()
+        if product_import_price.lower() == 'done':
+            return None # Exit the function if the user enters "done"
+        try:
+            product_import_price = f"{float(product_import_price):.2f}"
+            break
+        except ValueError:
+            print("Invalid import price input.")
+            
+    while True:
+        product_retail_price = input('Product Retail Price (RM): ').strip()
+        if product_retail_price.lower() == 'done':
+            return None # Exit the function if the user enters "done"
+        try:
+            product_retail_price = f"{float(product_retail_price):.2f}"
+            break
+        except ValueError:
+            print("Invalid retail price input.")
+    
+    print("\nAvailable Suppliers:")
+    valid_supplier_ids = []
+    while True:
+        try:
+            with open('suppliers.txt', 'r') as f:
+                suppliers = f.readlines()[2:]
+                for supplier in suppliers:
+                    supplier_info = supplier.split("\n")
+                    supplier_id = supplier_info[0] # Extract the Supplier ID
+                    valid_supplier_ids.append(supplier_id) # Add the Supplier ID to the list
+                    print(f"{supplier_info[0]}, {supplier_info[1]}")
+            
+            supplier_id = input("Supplier ID (SXXXX): ").strip()
+            if supplier_id.lower() == 'done':
+                return None # Exit the function if the user enters "done"
+            
+            if supplier_id in valid_supplier_ids:
+                break
+            else:
+                print("Invalid supplier ID. Please try again.")
+        
         except FileNotFoundError:
-            pass 
-
-        if not file_exists:
-            with open('products.txt', 'w') as f:
-                table_header = f"{'ProductID':<15}{'ProductName':<20}{'ProductCategory':<20}{'Quntity':<10}{'Price':<10}{'SupplierID':<10}\n"
-                table_header += '-' * 95 + '\n'
-                f.write(table_header)
-
-        with open('products.txt', 'a') as f:
-            print('Enter product details or "done" to exit: ')
-            while True:
-                try:
-                    product_name = input('Product Name: ')
-                    if product_name.lower().strip() == 'done':
-                        break
-                    
-                    while True:
-                        product_id = f'P{random.randint(1000,9999)}'
-                        if product_id not in existing_id:
-                            existing_id.add(product_id)
-                            break
-
-                    product_price = float(input('Product Price: '))
-                    product_quantity = int(input('Product Quantity: '))
-                    product_category = input('Product Category: ')
-                    supplier_id = input('Supplier ID: ')
-
-                    table = f"{product_id:<15}{product_name:<20}{product_category:<20}{product_quantity:<10}{product_price:<10.2f}{supplier_id:<10}\n"
-                    f.write(table)
-                    print(f'{product_name} with ID of {product_id} has been added. \n')
-
-                except ValueError:
-                    print('Invalid input. Please check your details and try again.')
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
+            print("No suppliers data available. Please add a supplier first.")
+            return None # Exit the function if there is no suppliers data available
+    
+    with open('products.txt', 'a') as f:
+        table = f"{'ProductID':<5}, {'ProductName':<25}, {'ProductCategory':<10}, {'ProductQuantity':<4}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<5}\n"
+        f.write(table)
+        print(f'{product_name} with ID of {product_id} has been added. \n')
+    
 def update_product():
     print(r"""
       _   _           _       _         ____                _            _   
