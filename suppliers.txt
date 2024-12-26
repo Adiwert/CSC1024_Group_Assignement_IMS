@@ -1,12 +1,12 @@
 SupplierID, SupplierName                  , ProductCategory, ContactNumber
 
-S0001     , Lababa Chocolate Enterprise   , Snacks         , 082-3232112
-S0002     , Ganergy Drink                 , Beverages      , 083-3321101
-S0003     , Yumz Fresh Co.                , Fruits         , 082-5551765
-S0004     , Nana Bakery                   , Bakery         , 084-9081112
-S0005     , Muthu Veggie Hub              , Vegetables     , 089-1011032
-S0006     , ABZ Enterprise                , Seafood        , 088-8818212
-S0007     , CZY Tropics                   , Fruits         , 011-3121114
-S0008     , Ahmet Maju Sdn Bhd            , Grains         , 083-3211343
-S0009     , Kura Mura Enterprise          , Frozen         , 017-6564432
-S0010     , Finx Hydrate                  , Beverages      , 081-1101323
+S0001     , Lababa_Chocolate_Enterprise   , Snacks         , 082-3232112
+S0002     , Ganergy_Drink                 , Beverages      , 083-3321101
+S0003     , Yumz_Fresh_Co.                , Fruits         , 082-5551765
+S0004     , Nana_Bakery                   , Bakery         , 084-9081112
+S0005     , Muthu_Veggie_Hub              , Vegetables     , 089-1011032
+S0006     , ABZ_Enterprise                , Seafood        , 088-8818212
+S0007     , CZY_Tropics                   , Fruits         , 011-3121114
+S0008     , Ahmet_Maju_Sdn_Bhd            , Grains         , 083-3211343
+S0009     , Kura_Mura_Enterprise          , Frozen         , 017-6564432
+S0010     , Finx_Hydrate                  , Beverages      , 081-1101323

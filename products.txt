@@ -1,23 +1,22 @@
-ProductID , ProductName              , ProductCategory, ProductQuantity, ProductImportPrice, ProductRetailPrice, SupplierID
+ProductID , ProductName              , ProductCategory, ProductQuantity, ProductImportPrice  , ProductRetailPrice  , SupplierID
 
-P0001     , Lubaba Chocolate         , Snacks         , 200            , 4.5     , 5.5     , S0001     
-P0002     , PowerGan                 , Beverages      , 250            , 3.5     , 4.0     , S0002     
-P0003     , Yumz Strawberry          , Fruits         , 340            , 10.5    , 11.5    , S0003     
-P0004     , Roti Lazat Nana          , Bakery         , 100            , 2.5     , 3.0     , S0004     
-P0005     , Broccoli Pahang          , Vegetables     , 80             , 4.5     , 4.9     , S0005     
-P0006     , ABZ Seafood              , Seafood        , 100            , 15.5    , 17.5    , S0006     
-P0007     , CZY Fresh Corn           , Fruits         , 100            , 3.5     , 4.0     , S0007     
-P0008     , Whitey Fruit Scone       , Bakery         , 200            , 8.5     , 10.0    , S0003     
-P0009     , Whitey Ginger Bread      , Bakery         , 150            , 4.5     , 5.5     , S0003     
-P0010     , Roze Ice Cream           , Snacks         , 40             , 4.5     , 4.8     , S0006     
-P0011     , Chocolatey Ice Cream     , Snacks         , 40             , 5.5     , 5.8     , S0006     
-P0012     , Ahmet Healthy Grains     , Grains         , 30             , 45.5    , 50.5    , S0008     
-P0013     , Ahmet Bakao Rice         , Grains         , 30             , 25.5    , 30.5    , S0008     
-P0014     , Minnie Waffle Ice Cream  , Snacks         , 40             , 6.5     , 6.8     , S0006     
-P0015     , Kura Mura Chicken Nugget , Frozen         , 50             , 12.5    , 13.0    , S0009     
-P0016     , Kura Mura Fish Nugget    , Frozen         , 50             , 10.5    , 11.0    , S0009     
-P0017     , Kura Mura Crab Stick     , Frozen         , 35             , 5.5     , 6.0     , S0009     
-P0018     , Yumz Orange              , Fruits         , 200            , 6.5     , 7.0     , S0003     
-P0019     , Yumz Kiwi                , Fruits         , 200            , 4.0     , 4.5     , S0003     
-P0020     , Finx Energy Drink        , Beverages      , 200            , 4.8     , 5.2     , S0001     
-P0021     , Ice cram                 , Dairy          , 100            , 2.0     , 2.07    , S0001     
+P0001     , Lubaba_Chocolate         , Snacks         , 200            , 4.5                 , 5.5                 , S0001     
+P0002     , PowerGan                 , Beverages      , 250            , 3.5                 , 4.0                 , S0002     
+P0003     , Yumz_Strawberry          , Fruits         , 340            , 10.5                , 11.5                , S0003     
+P0004     , Roti_Lazat_Nana          , Bakery         , 100            , 2.5                 , 3.0                 , S0004     
+P0005     , Broccoli_Pahang          , Vegetables     , 80             , 4.5                 , 4.9                 , S0005     
+P0006     , ABZ_Seafood              , Seafood        , 100            , 15.5                , 17.5                , S0006     
+P0007     , CZY_Fresh_Corn           , Fruits         , 100            , 3.5                 , 4.0                 , S0007     
+P0008     , Whitey_Fruit_Scone       , Bakery         , 200            , 8.5                 , 10.0                , S0003     
+P0009     , Whitey_Ginger_Bread      , Bakery         , 150            , 4.5                 , 5.5                 , S0003     
+P0010     , Roze_Ice_Cream           , Snacks         , 40             , 4.5                 , 4.8                 , S0006     
+P0011     , Chocolate_Ice_Cream      , Snacks         , 40             , 5.5                 , 5.8                 , S0006     
+P0012     , Ahmet_Healthy_Grains     , Grains         , 30             , 45.5                , 50.5                , S0008     
+P0013     , Ahmet_Bakao_Rice         , Grains         , 30             , 25.5                , 30.5                , S0008     
+P0014     , Minnie_Waffle_Ice_Cream  , Snacks         , 40             , 6.5                 , 6.8                 , S0006     
+P0015     , Kura_Mura_Chicken_Nugget , Frozen         , 50             , 12.5                , 13.0                , S0009     
+P0016     , Kura_Mura_Fish_Nugget    , Frozen         , 50             , 10.5                , 11.0                , S0009     
+P0017     , Kura_Mura_Crab_Stick     , Frozen         , 35             , 5.5                 , 6.0                 , S0009     
+P0018     , Yumz_Orange              , Fruits         , 200            , 6.5                 , 7.0                 , S0003     
+P0019     , Yumz_Kiwi                , Fruits         , 200            , 4.0                 , 4.5                 , S0003     
+P0020     , Finx_Energy_Drink        , Beverages      , 200            , 4.8                 , 5.2                 , S0001     

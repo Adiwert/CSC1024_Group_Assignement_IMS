@@ -10,9 +10,9 @@ PRODUCT_CATEGORIES = [
 # Function to format names when append it into txt files
 def format_name(name):
     words = name.split() # Splits the name into individual words.
-    cap_words = [word.title() for word in words] # Capitalizes the first letter of each word.
-    formatted_name = '_'.join(cap_words) # Joins the capitalized words with underscores.
-
+    cap_words = [word.capitalize() for word in words] # Capitalizes the first letter of each word.
+    formatted_name = '_'.join(cap_words) # Joins the capitalized words with underscores
+    
     return formatted_name
 
 # General helper function to get the next ID for any file
@@ -84,7 +84,7 @@ def add_product():
 
     if not file_exists:
         with open('products.txt', 'w') as f:
-            table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<10}\n\n"
+            table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<20}, {'ProductRetailPrice':<20}, {'SupplierID':<10}\n\n"
             f.write(table_header)
 
     print('Enter product details or "quit" to exit: ')
@@ -113,7 +113,7 @@ def add_product():
             break # Exit loop if valid category is entered
 
     while True:
-        product_quantity = input('Product Quantity: ')
+        product_quantity = input('Product Quantity: ').strip()
         if product_quantity.lower() == 'quit':
             return None # Exit the function if the user enters "quit"
         try:
@@ -158,9 +158,9 @@ def add_product():
             return None # Exit the function if there is no suppliers data available
     
     with open('products.txt', 'a') as f:
-        table = f"{product_id:<10}, {product_name:<25}, {product_category:<15}, {product_quantity:<15}, {product_import_price:<20}, {product_retail_price:<20}, {supplier_id:<10}\n"
+        table = f"{product_id:<10}, {formatted_name:<25}, {product_category:<15}, {product_quantity:<15}, {product_import_price:<20}, {product_retail_price:<20}, {supplier_id:<10}\n"
         f.write(table)
-        print(f'{product_name} with ID of {product_id} has been added. \n')
+        print(f'{formatted_name} with ID of {product_id} has been added.\n')
 
 
 
@@ -227,7 +227,8 @@ def update_product():
                     return None
                 if new_name == '':
                     break
-                product['Name'] = new_name
+                formatted_name = format_name(new_name)
+                product['Name'] = formatted_name
                 break
 
             while True:
@@ -309,10 +310,10 @@ def update_product():
         return None
     
     with open('products.txt', 'w') as f:
-        table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<10}\n\n"
+        table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<20}, {'ProductRetailPrice':<20}, {'SupplierID':<10}\n\n"
         f.write(table_header)
         for product in products:
-            table = f"{product['ID']:<10}, {product['Name']:<25}, {product['Category']:<15}, {product['Quantity']:<15}, {product['Import Price']:<8}, {product['Retail Price']:<8}, {product['Supplier ID']:<10}\n"
+            table = f"{product['ID']:<10}, {product['Name']:<25}, {product['Category']:<15}, {product['Quantity']:<15}, {product['Import Price']:<20}, {product['Retail Price']:<20}, {product['Supplier ID']:<10}\n"
             f.write(table)
     
     print(f"Product with ID {product_id} has been successfully updated.")
@@ -329,77 +330,64 @@ def add_supplier():
                                       |_|   |_|                  
     """)
     # Code to add a supplier to suppliers.txt
-    import re # module for pattern matching and manipulation (validation)
-
-    # Supplier categories
-    categories = [
-        "dairy", "fruits", "vegetables", "poultry", "seafood",
-        "beverages", "bakery", "snacks", "condiments", "grains"
-        ]
-    
-    # Load suppliers file
-    suppliers = {} # Initialise dictionary to hold data, key is SupplierID
     try:
         with open('suppliers.txt', 'r') as f:
-            for line in f:
-                parts = line.strip().split(', ') #  remove spaces, and split the content with ','
-                if len(parts) == 4: # follows the columns contents
-                    supplier_id = parts[0] # parts[0] is the SupplierID (key)
-                    suppliers[supplier_id] = line.strip()
+            lines = f.readlines()
+            file_exists = bool(lines)
     except FileNotFoundError:
-        print("suppliers.txt not found.")
-    except Exception as e:
-        print(f"Error reading suppliers.txt: {e}")
-        return
+        file_exists = False
 
-    # Add new supplier
+    if not file_exists:
+        with open('suppliers.txt', 'w') as f:
+            table_header = f"{'SupplierID':<10}, {'SupplierName':<30}, {'ProductCategory':<15}, {'ContactNumber':<15}\n\n"
+            f.write(table_header)
+
+    print('Enter supplier details or "quit" to exit: ')
+
+    supplier_id = get_next_id('suppliers.txt', 'S')
+    print(f"Supplier ID: {supplier_id}")
+    
+    while True:
+        supplier_name = input('Supplier Name: ').strip()
+        if supplier_name.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
+        formatted_name = format_name(supplier_name)
+        if formatted_name:
+            break
+    
+    while True:
+        print("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others")
+        product_category = input('Product Category: ').strip().capitalize()
+        if product_category.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
+        if product_category not in PRODUCT_CATEGORIES:
+            print("Invalid category, defaulting to 'Others'.")
+            product_category = 'Others'
+            break
+        else:
+            break # Exit loop if valid category is entered
+
+    while True:
+        contact_number = input('Enter Contact Number (format 01x-xxxxxxxx): ').strip()
+        if contact_number.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
+        if len(contact_number) not in [11, 12]:
+            print("Invalid contact number. Please try again.")
+            continue
+        if contact_number[:2] != '01' or contact_number[3] != '-':
+            print("Invalid contact number. Please try again.")
+            continue
+        if not contact_number[2:3].isdigit() or not contact_number[4:].isdigit():
+            print("Invalid contact number. Please try again.")
+            continue
+        break # Exit loop if valid contact number is entered
+
     with open('suppliers.txt', 'a') as f:
-        print('Enter supplier details or "quit" to exit:\n')
+        table = f"{supplier_id:<10}, {formatted_name:<30}, {product_category:<15}, {contact_number:<15}\n"
+        f.write(table)
+        print(f'{formatted_name} with ID of {supplier_id} has been added.\n')
 
-        while True:
-            try:
-                # Display product categories
-                print(f"Product Catehories: {', '.join(categories)}")
 
-                # Validate product category
-                product_category = input("Enter Product Category: ").strip().lower()
-                if product_category.lower() == 'quit':
-                    break
-                if product_category not in categories:
-                    print(f"Invalid category. Choose one from {', '.join(categories)}.")
-                    continue
-
-                # Validate contact number
-                contact_number = input('Enter Contact Number (format 01x-xxxxxxxx): ').strip()
-                if not re.match(r"^01[0-9]-\d{7,8}$", contact_number): # Check if input follow the format
-                    print("Invalid contact number. Please follow the format 01x-xxxxxxxx.")
-                    continue
-
-                # Validate supplier name
-                supplier_name = input('Enter Supplier Name: ').strip()
-                if not supplier_name:
-                    print("Please enter supplier name.")
-                    continue
-                if " " in supplier_name: # Change the space to '_' if have space
-                    supplier_name = supplier_name.replace(" ","_")
-                
-                # Generate Supplier ID
-                new_supplier_id = f"S{len(suppliers) + 1:04d}" # Auto generate ID eg. S0003
-
-                # Append file
-                supplier_entry = f"{new_supplier_id}, {supplier_name}, {product_category}, {contact_number}\n"
-                f.write(supplier_entry)
-
-                # Update in-memory list for future reference (ID)
-                suppliers[new_supplier_id] = supplier_entry.strip()
-
-                # Display update status
-                print(f"Supplier added successfully:\n"
-                      f"Supplier ID: {new_supplier_id}\nCategory: {product_category}\n"
-                      f"Contact Number: {contact_number}\nName: {supplier_name}\n")
-            
-            except Exception as e:
-                print(f"An error occured: {e}")
 
 def place_order():
     print(r"""
@@ -687,7 +675,7 @@ def main_menu():
     ____________________________________________________________________________________________________________________
     """)
     while True:
-        print("\nInventory Management System")
+        print("\nMain Menu")
         print("1. Add a New Product")
         print("2. Update Product Details")
         print("3. Add a New Supplier")
@@ -710,7 +698,14 @@ def main_menu():
         elif choice == '6':
             generate_reports()
         elif choice == '7':
-            print("See you again!")
+            print(r"""
+                  ____             __   __               _               _       _ 
+                 / ___|  ___  ___  \ \ / /__  _   _     / \   __ _  __ _(_)_ __ | |
+                 \___ \ / _ \/ _ \  \ V / _ \| | | |   / _ \ / _` |/ _` | | '_ \| |
+                  ___) |  __/  __/   | | (_) | |_| |  / ___ \ (_| | (_| | | | | |_|
+                 |____/ \___|\___|   |_|\___/ \__,_| /_/   \_\__, |\__,_|_|_| |_(_)
+                                                             |___/                 
+            """)
             break
         else:
             print("Invalid choice. Please try again.")
