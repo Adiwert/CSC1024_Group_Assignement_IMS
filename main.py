@@ -36,6 +36,34 @@ def get_next_id(file_name, prefix):
     # If the file does not exist, return the prefix followed by 0001
     except FileNotFoundError:
         return f'{prefix}0001'
+    
+def valid_suppliers(filename='suppliers.txt'):
+    valid_suppliers_ids = []
+    try:
+        with open(filename, "r") as f:
+            suppliers = f.readlines()[2:]
+        for supplier in suppliers:
+            supplier_info = [item.strip() for item in supplier.split(", ")]
+            valid_suppliers_ids.append(supplier_info[0])
+            print(f"{supplier_info[0]} - {supplier_info[1]}")
+    except FileNotFoundError:
+        print("No suppliers found.")
+    
+    return valid_suppliers_ids
+
+def valid_products(filename='products.txt'):
+    valid_products_ids = []
+    try:
+        with open(filename, "r") as f:
+            products = f.readlines()[2:]
+        for product in products:
+            product_info = [item.strip() for item in product.split(", ")]
+            valid_products_ids.append(product_info[0])
+            print(f"{product_info[0]} - {product_info[1]}")
+    except FileNotFoundError:
+        print("No products found.")
+        
+    return valid_products_ids
 
 # Defines the `add_product` function to add new products to an inventory management system.
 def add_product():
@@ -56,18 +84,18 @@ def add_product():
 
     if not file_exists:
         with open('products.txt', 'w') as f:
-            table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<10}\n"
+            table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<10}\n\n"
             f.write(table_header)
 
-    print('Enter product details or "done" to exit: ')
+    print('Enter product details or "quit" to exit: ')
     
     product_id = get_next_id('products.txt', 'P')
     print(f"Product ID: {product_id}")
     
     while True:
         product_name = input('Product Name: ').strip()
-        if product_name.lower() == 'done':
-            return None # Exit the function if the user enters "done"
+        if product_name.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
         formatted_name = format_name(product_name)
         if formatted_name:
             break
@@ -75,19 +103,19 @@ def add_product():
     while True:
         print("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others")
         product_category = input('Product Category: ').strip().capitalize()
-        if product_category.lower() == 'done':
-            return None # Exit the function if the user enters "done"
+        if product_category.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
         if product_category not in PRODUCT_CATEGORIES:
-            print("Invalid categopory, defaulting to 'Others'")
+            print("Invalid category, defaulting to 'Others'.")
             product_category = 'Others'
             break
         else:
-            break
+            break # Exit loop if valid category is entered
 
     while True:
         product_quantity = input('Product Quantity: ')
-        if product_quantity.lower() == 'done':
-            return None # Exit the function if the user enters "done"
+        if product_quantity.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
         try:
             product_quantity = int(product_quantity)
             break
@@ -96,8 +124,8 @@ def add_product():
     
     while True:
         product_import_price = input('Product Import Price (RM): ').strip()
-        if product_import_price.lower() == 'done':
-            return None # Exit the function if the user enters "done"
+        if product_import_price.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
         try:
             product_import_price = f"{float(product_import_price):.2f}"
             break
@@ -106,8 +134,8 @@ def add_product():
             
     while True:
         product_retail_price = input('Product Retail Price (RM): ').strip()
-        if product_retail_price.lower() == 'done':
-            return None # Exit the function if the user enters "done"
+        if product_retail_price.lower() == 'quit':
+            return None # Exit the function if the user enters "quit"
         try:
             product_retail_price = f"{float(product_retail_price):.2f}"
             break
@@ -115,26 +143,16 @@ def add_product():
             print("Invalid retail price input.")
     
     print("\nAvailable Suppliers:")
-    valid_supplier_ids = []
+    valid_supplier_ids = valid_suppliers()
     while True:
         try:
-            with open('suppliers.txt', 'r') as f:
-                suppliers = f.readlines()[2:]
-                for supplier in suppliers:
-                    supplier_info = supplier.split(", ")
-                    supplier_id = supplier_info[0] # Extract the Supplier ID
-                    valid_supplier_ids.append(supplier_id) # Add the Supplier ID to the list
-                    print(f"{supplier_info[0]}, {supplier_info[1]}")
-            
             supplier_id = input("Supplier ID (SXXXX): ").strip()
-            if supplier_id.lower() == 'done':
-                return None # Exit the function if the user enters "done"
-            
+            if supplier_id.lower() == 'quit':
+                return None # Exit the function if the user enters "quit"
             if supplier_id in valid_supplier_ids:
                 break
             else:
                 print("Invalid supplier ID. Please try again.")
-        
         except FileNotFoundError:
             print("No suppliers data available. Please add a supplier first.")
             return None # Exit the function if there is no suppliers data available
@@ -157,82 +175,149 @@ def update_product():
     """)
     # Load products
     products = []
-
     try:
         with open('products.txt', 'r') as f:
-            lines = f.readlines()
-
-        
-        for line in lines[2:]:  
-            if line.strip():
-                product_id = line[:15].strip()
-                product_name = line[15:35].strip()
-                product_category = line[35:55].strip()
-                product_quantity = line[55:65].strip()
-                product_price = line[65:75].strip()
-                supplier_id = line[75:].strip()
-
-                product = {
-                    'ID': product_id,
-                    'Name': product_name,
-                    'Category': product_category,
-                    'Quantity': product_quantity,
-                    'Price': float(product_price) if product_price else 0,
-                    'Supplier ID': supplier_id
-                }
-                products.append(product)
+            lines = f.readlines()[2:]
+            for line in lines:
+                if line.strip():
+                    fields = [item.strip() for item in line.split(", ")]
+                    product = {
+                        'ID': fields[0],
+                        'Name': fields[1],
+                        'Category': fields[2],
+                        'Quantity': int(fields[3]),
+                        'Import Price': float(fields[4]),
+                        'Retail Price': float(fields[5]),
+                        'Supplier ID': fields[6]
+                    }
+                    products.append(product)
 
     except FileNotFoundError:
         print("No products file found. Please add products first.")
         return
-
+    except IndexError:
+        print("Malformed data. Please check the file format.")
+        return
     
-    product_id = input('\nEnter product ID to update: ').strip().lower()
+    print("\nAvailable Products:")
+    valid_product_ids = valid_products()
+
+    while True:
+        product_id = input('\nEnter product ID to update (or type "quit" to exit): ').strip()
+        if product_id.lower() == 'quit':
+            return None
+        if product_id.strip() in [valid_id.strip() for valid_id in valid_product_ids]:
+            break
+        else:
+            print("Invalid product ID. Please try again.")
+
     for product in products:
-        if product['ID'].lower() == product_id:
+        if product['ID'] == product_id:
             print('Current Product Details:')
-            print(f"Name: {product['Name']}, Category: {product['Category']}, Quantity: {product['Quantity']}, Price: {product['Price']}, Supplier ID: {product['Supplier ID']}")
-
-            new_name = input('Enter new Product Name (skip if no updates): ').strip()
-            if new_name:  
+            print(f"Name: {product['Name']}")
+            print(f"Category: {product['Category']}")
+            print(f"Quantity: {product['Quantity']}")
+            print(f"Import Price: {product['Import Price']}")
+            print(f"Retail Price: {product['Retail Price']}")
+            print(f"Supplier ID: {product['Supplier ID']}")
+            
+            while True:
+                new_name = input('Enter new Product Name (Press "Enter" if no updates): ').strip()
+                if new_name.lower() == 'quit':
+                    return None
+                if new_name == '':
+                    break
                 product['Name'] = new_name
+                break
 
-            new_category = input('Enter new Product Category (skip if no updates): ').strip()
-            if new_category:  
-                product['Category'] = new_category
-            
-            try:
-                new_quantity = int(input('Enter new Product Quantity (skip if no updates): ').strip())
-                if new_quantity:
-                    product['Quantity'] = new_quantity
-            except ValueError:
-                print('Invalid quantity entered. Keeping the old quantity')
-            
-            try:
-                new_price = input('Enter new Product Price (skip if no updates): ').strip()
-                if new_price:  
-                    product['Price'] = float(new_price)
-            except ValueError:
-                print('Invalid price entered. Keeping the old price.')
-            
-            new_supplier_id = input('Enter new Supplier ID (skip if no updates): ').strip()
-            if new_supplier_id:
-                product['Supplier ID'] = new_supplier_id
+            while True:
+                print("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others")
+                new_category = input('Enter new Product Category (Press "Enter" if no updates): ').strip().capitalize()
+                if new_category.lower() == 'quit':
+                    return None
+                if new_category == '':
+                    break
+                if new_category: # If the input is empty, keep the current category
+                    if new_category not in PRODUCT_CATEGORIES:
+                        print("Invalid category, defaulting to 'Others'.")
+                        product['Category'] = 'Others'
+                    else:
+                        product['Category'] = new_category
+                break
 
+            while True:
+                try:
+                    new_quantity = input('Enter new Product Quantity (Press "Enter" if no updates): ').strip()
+                    if new_quantity.lower() == 'quit':
+                        return None
+                    if new_quantity == '':
+                        break
+                    if new_quantity:
+                        product['Quantity'] = int(new_quantity)
+                        break
+                except ValueError:
+                    print('Invalid quantity entered. Keeping the old quantity.')
+            
+            while True:
+                try:
+                    new_import_price = input('Enter new Product Price (Press "Enter" if no updates): ').strip()
+                    if new_import_price.lower() == 'quit':
+                        return None
+                    if new_import_price == '':
+                        break
+                    if new_import_price:  
+                        product['Import Price'] = f"{float(new_import_price):.2f}"
+                        break
+                except ValueError:
+                    print('Invalid import price entered. Keeping the old import price.')
+                    
+            while True:
+                try:
+                    new_retail_price = input('Enter new Product Retail Price (Press "Enter" if no updates): ').strip()
+                    if new_retail_price.lower() == 'quit':
+                        return None
+                    if new_retail_price == '':
+                        break
+                    if new_retail_price:
+                        product['Retail Price'] = f"{float(new_retail_price):.2f}"
+                        break
+                except ValueError:
+                    print('Invalid retail price entered. Keeping the old retail price.')
+
+            print("\nAvailable Suppliers:")
+            valid_supplier_ids = valid_suppliers()
+            while True:
+                try:
+                    new_supplier_id = input('Enter new Supplier ID (Press "Enter" if no updates): ').strip()
+                    if new_supplier_id.lower() == 'quit':
+                        return None
+                    if new_supplier_id == '':
+                        break
+                    if new_supplier_id in valid_supplier_ids:
+                        product['Supplier ID'] = new_supplier_id
+                        break
+                    else:
+                        print("Invalid Supplier ID. Please try again.")
+                except FileNotFoundError:
+                    print("No suppliers data available. Please add a supplier first.")
+                    return None # Exit the function if there is no suppliers data available
+            
             print('Product successfully updated.')
             break
     else:
         print('Invalid Product ID.')
-        return
-
+        return None
     
     with open('products.txt', 'w') as f:
-        table_header = f"{'ProductID':<15}{'ProductName':<20}{'ProductCategory':<20}{'Quntity':<10}{'Price':<10}{'SupplierID':<10}\n"
-        table_header += '-' * 80 + '\n'
+        table_header = f"{'ProductID':<10}, {'ProductName':<25}, {'ProductCategory':<15}, {'ProductQuantity':<15}, {'ProductImportPrice':<8}, {'ProductRetailPrice':<8}, {'SupplierID':<10}\n\n"
         f.write(table_header)
         for product in products:
-            table = f"{product['ID']:<15}{product['Name']:<20}{product['Category']:<20}{product['Quantity']:<10}{product['Price']:<10.2f}{product['Supplier ID']:<10}\n"
+            table = f"{product['ID']:<10}, {product['Name']:<25}, {product['Category']:<15}, {product['Quantity']:<15}, {product['Import Price']:<8}, {product['Retail Price']:<8}, {product['Supplier ID']:<10}\n"
             f.write(table)
+    
+    print(f"Product with ID {product_id} has been successfully updated.")
+
+
 
 def add_supplier():
     print(r"""
@@ -269,7 +354,7 @@ def add_supplier():
 
     # Add new supplier
     with open('suppliers.txt', 'a') as f:
-        print('Enter supplier details or "done" to exit:\n')
+        print('Enter supplier details or "quit" to exit:\n')
 
         while True:
             try:
@@ -278,7 +363,7 @@ def add_supplier():
 
                 # Validate product category
                 product_category = input("Enter Product Category: ").strip().lower()
-                if product_category.lower() == 'done':
+                if product_category.lower() == 'quit':
                     break
                 if product_category not in categories:
                     print(f"Invalid category. Choose one from {', '.join(categories)}.")
