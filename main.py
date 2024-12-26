@@ -4,14 +4,14 @@ import random # Imports the random module to generate random product IDs.
 
 # Defines the `add_product` function to add new products to an inventory management system.
 def add_product():
-    print(r"
+    print(r"""
          _       _     _   ____                _            _   
         / \   __| | __| | |  _ \ _ __ ___   __| |_   _  ___| |_ 
        / _ \ / _` |/ _` | | |_) | '__/ _ \ / _` | | | |/ __| __|
       / ___ \ (_| | (_| | |  __/| | | (_) | (_| | |_| | (__| |_ 
      /_/   \_\__,_|\__,_| |_|   |_|  \___/ \__,_|\__,_|\___|\__|
     
-    ")
+    """)
     try:
         file_exists = False
         existing_id = set()
@@ -63,14 +63,14 @@ def add_product():
         print(f"An error occurred: {e}")
 
 def update_product():
-    print(r"
+    print(r"""
       _   _           _       _         ____                _            _   
      | | | |_ __   __| | __ _| |_ ___  |  _ \ _ __ ___   __| |_   _  ___| |_ 
      | | | | '_ \ / _` |/ _` | __/ _ \ | |_) | '__/ _ \ / _` | | | |/ __| __|
      | |_| | |_) | (_| | (_| | ||  __/ |  __/| | | (_) | (_| | |_| | (__| |_ 
       \___/| .__/ \__,_|\__,_|\__\___| |_|   |_|  \___/ \__,_|\__,_|\___|\__|
            |_|                                                               
-    ")
+    """)
     # Code to update product details:
     products = []
 
@@ -151,14 +151,14 @@ def update_product():
             f.write(table)
 
 def add_supplier():
-    print(r"
+    print(r"""
          _       _     _   ____                    _ _           
         / \   __| | __| | / ___| _   _ _ __  _ __ | (_) ___ _ __ 
        / _ \ / _` |/ _` | \___ \| | | | '_ \| '_ \| | |/ _ \ '__|
       / ___ \ (_| | (_| |  ___) | |_| | |_) | |_) | | |  __/ |   
      /_/   \_\__,_|\__,_| |____/ \__,_| .__/| .__/|_|_|\___|_|   
                                       |_|   |_|                  
-    ")
+    """)
     # Code to add a supplier to suppliers.txt
     import re # module for pattern matching and manipulation (validation)
 
@@ -233,14 +233,14 @@ def add_supplier():
                 print(f"An error occured: {e}")
 
 def place_order():
-    print(r"
+    print(r"""
       ____  _                   ___          _           
      |  _ \| | __ _  ___ ___   / _ \ _ __ __| | ___ _ __ 
      | |_) | |/ _` |/ __/ _ \ | | | | '__/ _` |/ _ \ '__|
      |  __/| | (_| | (_|  __/ | |_| | | | (_| |  __/ |   
      |_|   |_|\__,_|\___\___|  \___/|_|  \__,_|\___|_|   
     
-    ")
+    """)
     # Code to place an order
     # Initialise products dictionary
     products = {} # Initialise to hold data, the key is Product ID
@@ -362,14 +362,14 @@ def place_order():
     print(f"Order {new_order_id} placed successfully!")
 
 def view_inventory():
-    print(r"
+    print(r"""
      __     ___                 ___                      _                   
      \ \   / (_) _____      __ |_ _|_ ____   _____ _ __ | |_ ___  _ __ _   _ 
       \ \ / /| |/ _ \ \ /\ / /  | || '_ \ \ / / _ \ '_ \| __/ _ \| '__| | | |
        \ V / | |  __/\ V  V /   | || | | \ V /  __/ | | | || (_) | |  | |_| |
         \_/  |_|\___| \_/\_/   |___|_| |_|\_/ \___|_| |_|\__\___/|_|   \__, |
                                                                        |___/ 
-    ")
+    """)
     try:
         with open("products.txt",'r') as file:
             lines = file.readlines()
@@ -389,14 +389,14 @@ def view_inventory():
     pass
 
 def generate_reports():
-    print(r"
+    print(r"""
        ____                           _              ____                       _       
       / ___| ___ _ __   ___ _ __ __ _| |_ ___  ___  |  _ \ ___ _ __   ___  _ __| |_ ___ 
      | |  _ / _ \ '_ \ / _ \ '__/ _` | __/ _ \/ __| | |_) / _ \ '_ \ / _ \| '__| __/ __|
      | |_| |  __/ | | |  __/ | | (_| | ||  __/\__ \ |  _ <  __/ |_) | (_) | |  | |_\__ \
       \____|\___|_| |_|\___|_|  \__,_|\__\___||___/ |_| \_\___| .__/ \___/|_|   \__|___/
                                                               |_|                       
-    ")
+    """)
     # Code to generate reports
     try:
         with open("products.txt",'r') as file :
@@ -472,7 +472,7 @@ def generate_reports():
 
 
 def main_menu():
-    print(r"                                                                                                                                                                                    
+    print(r"""                                                                                                                                                                                   
                                 ██████████████████████████████████████████████████████                                                                  
                                 █████████████        ████████████         ████████████                                                                  
                                 █████████████████████████████████    █████████████████                                                                  
@@ -516,7 +516,7 @@ def main_menu():
                                        |_|  |_|\__,_|_| |_|\__,_|\__, |\___|_|       
                                                                  |___/        
     ____________________________________________________________________________________________________________________
-    ")
+    """)
     while True:
         print("\nInventory Management System")
         print("1. Add a New Product")
