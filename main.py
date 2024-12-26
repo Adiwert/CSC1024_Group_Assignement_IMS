@@ -1,98 +1,137 @@
 import datetime # to add date and probably time inside the order file
 from prettytable import PrettyTable
+import random
 
 def add_product():
-    # Code to add a product to products.txt
-    products = []
-    table_header = f"{'ID':<10}{'Name':<20}{'Price':<10}{'Desccription':<40}\n"
-    table_header += '-' * 80 + '\n'
-    
-    with open('products.txt', 'w') as f:
-        f.write(table_header)
-        print('Enter product details or "done" to exit: ')
+    try:
+        file_exists = False
+        existing_id = set()
+        try:
+            with open('products.txt', 'r') as f:
+                lines = f.readlines() 
+                file_exists = bool(lines)
 
-        while True:
-            try:
-                product_id = input('Product ID: ')
-                if product_id.lower().strip() == 'done':
-                    break
-                product_name = input('Product Name: ')
-                product_price = float(input('Product Price: '))
-                product_desc = input('Product Description: ')
+                for line in lines[2:]:
+                    if line.strip():
+                        existing_id.add(line[:10].strip())
 
-                product = {
-                    'ID': product_id,
-                    'Name': product_name,
-                    'Price': product_price,
-                    'Description': product_desc
-                }
+        except FileNotFoundError:
+            pass 
 
-                products.append(product)
+        if not file_exists:
+            with open('products.txt', 'w') as f:
+                table_header = f"{'ProductID':<15}{'ProductName':<20}{'ProductCategory':<20}{'Quntity':<10}{'Price':<10}{'SupplierID':<10}\n"
+                table_header += '-' * 95 + '\n'
+                f.write(table_header)
 
-                table = f'{product_id:<10}{product_name:<20}{product_price:<10}{product_desc:<40}\n'
-                f.write(table)
-                print('Product added \n')
+        with open('products.txt', 'a') as f:
+            print('Enter product details or "done" to exit: ')
+            while True:
+                try:
+                    product_name = input('Product Name: ')
+                    if product_name.lower().strip() == 'done':
+                        break
+                    
+                    while True:
+                        product_id = f'P{random.randint(1000,9999)}'
+                        if product_id not in existing_id:
+                            existing_id.add(product_id)
+                            break
 
-            except ValueError:
-                print('Please check the details for typo.')
-                return
+                    product_price = float(input('Product Price: '))
+                    product_quantity = int(input('Product Quantity: '))
+                    product_category = input('Product Category: ')
+                    supplier_id = input('Supplier ID: ')
+
+                    table = f"{product_id:<15}{product_name:<20}{product_category:<20}{product_quantity:<10}{product_price:<10.2f}{supplier_id:<10}\n"
+                    f.write(table)
+                    print(f'{product_name} with ID of {product_id} has been added. \n')
+
+                except ValueError:
+                    print('Invalid input. Please check your details and try again.')
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def update_product():
     # Code to update product details:
     products = []
 
     try:
-        with open('products.txt','r') as f:
+        with open('products.txt', 'r') as f:
             lines = f.readlines()
 
-        for line in lines[2:]:
+        
+        for line in lines[2:]:  
             if line.strip():
-                product_id = line[:10].strip()
-                product_name = line[10:30].strip()
-                product_price = line[30:40].strip()
-                product_description = line[40:].strip()
+                product_id = line[:15].strip()
+                product_name = line[15:35].strip()
+                product_category = line[35:55].strip()
+                product_quantity = line[55:65].strip()
+                product_price = line[65:75].strip()
+                supplier_id = line[75:].strip()
 
                 product = {
                     'ID': product_id,
                     'Name': product_name,
+                    'Category': product_category,
+                    'Quantity': product_quantity,
                     'Price': float(product_price) if product_price else 0,
-                    'Description': product_description
+                    'Supplier ID': supplier_id
                 }
                 products.append(product)
 
     except FileNotFoundError:
         print("No products file found. Please add products first.")
         return
-            
+
+    
     product_id = input('\nEnter product ID to update: ').strip().lower()
     for product in products:
-        if product ['ID'].lower() == product_id:
-            print('Current Product Details: ')
-            print(f"Name: {product['Name']}, Price: {product['Price']}, Description: {product['Description']}")
+        if product['ID'].lower() == product_id:
+            print('Current Product Details:')
+            print(f"Name: {product['Name']}, Category: {product['Category']}, Quantity: {product['Quantity']}, Price: {product['Price']}, Supplier ID: {product['Supplier ID']}")
 
-            product['Name'] = input('Enter new Product Name (skip if no updates): ')
+            new_name = input('Enter new Product Name (skip if no updates): ').strip()
+            if new_name:  
+                product['Name'] = new_name
+
+            new_category = input('Enter new Product Category (skip if no updates): ').strip()
+            if new_category:  
+                product['Category'] = new_category
+            
             try:
-                price_input = input('Enter new Product Price (skip if no updates): ')
-                if price_input:
-                    product['Price'] = float(price_input)
+                new_quantity = int(input('Enter new Product Quantity (skip if no updates): ').strip())
+                if new_quantity:
+                    product['Quantity'] = new_quantity
             except ValueError:
-                print('Enter a valid price')
-            product['Description'] = input('Enter new Product Description (skip if no updates): ')
+                print('Invalid quantity entered. Keeping the old quantity')
+            
+            try:
+                new_price = input('Enter new Product Price (skip if no updates): ').strip()
+                if new_price:  
+                    product['Price'] = float(new_price)
+            except ValueError:
+                print('Invalid price entered. Keeping the old price.')
+            
+            new_supplier_id = input('Enter new Supplier ID (skip if no updates): ').strip()
+            if new_supplier_id:
+                product['Supplier ID'] = new_supplier_id
 
-            print('Succesfully Updated Product')
+            print('Product successfully updated.')
             break
     else:
-        print('Invalid Product ID')
+        print('Invalid Product ID.')
         return
+
     
     with open('products.txt', 'w') as f:
-        table_header = f"{'ID':<10}{'Name':<20}{'Price':<10}{'Description':<40}\n"
-        table_header += "-" * 80 + "\n"
+        table_header = f"{'ProductID':<15}{'ProductName':<20}{'ProductCategory':<20}{'Quntity':<10}{'Price':<10}{'SupplierID':<10}\n"
+        table_header += '-' * 80 + '\n'
         f.write(table_header)
         for product in products:
-            table = f"{product['ID']:<10}{product['Name']:<20}{product['Price']:<10}{product['Description']:<40}\n"
+            table = f"{product['ID']:<15}{product['Name']:<20}{product['Category']:<20}{product['Quantity']:<10}{product['Price']:<10.2f}{product['Supplier ID']:<10}\n"
             f.write(table)
-
 
 def add_supplier():
     # Code to add a supplier to suppliers.txt
