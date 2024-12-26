@@ -1,6 +1,45 @@
 import datetime # Imports the datetime module to add date/time to details.
 from prettytable import PrettyTable # Imports the PrettyTable library for formatted table output.
-import random # Imports the random module to generate random product IDs.
+
+# Predefined food categories for the user to choose from
+product_categories = [
+    "Diary", "Fruits", "Vagetables", "Poultry", "Seafood",
+    "Beverages", "Bakery", "Snacks", "Condiments", "Grains"
+]
+
+# Function to format names when append it into txt files
+def format_name(name):
+    words = name.split() # Splits the name into individual words.
+    cap_words = [word.title() for word in words] # Capitalizes the first letter of each word.
+    formatted_name = '_'.join(cap_words) # Joins the capitalized words with underscores.
+
+    return formatted_name
+
+# General helper function to get the next ID for any file
+def get_next_id(file_name, prefix):
+    try:
+        with open(file_name, "r") as file:
+            lines = file.readlines()
+        if len(lines) <= 2:
+            return f'{prefix}0001'
+        
+        last_line = lines[-1]
+        last_id = last_line.split(", ")[0].strip()
+        
+        if last_id.startswith(prefix) and len(last_id[1:]) == 4 and last_id[1:].isdigit():
+            last_numeric_id = int(last_id[1:])
+            next_id = f'{prefix}{last_numeric_id + 1:04d}'
+            return next_id
+        else:
+            raise ValueError(f"Invalid ID format: {last_id}")
+    
+    # If the file does not exist, return the prefix followed by 0001
+    except FileNotFoundError:
+        return f'{prefix}0001'
+    # Catching any other exceptions
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 # Defines the `add_product` function to add new products to an inventory management system.
 def add_product():
