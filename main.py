@@ -541,7 +541,7 @@ def main_menu():
         elif choice == '6':
             generate_reports()
         elif choice == '7':
-            print("Exiting program...")
+            print("See you again!")
             break
         else:
             print("Invalid choice. Please try again.")
