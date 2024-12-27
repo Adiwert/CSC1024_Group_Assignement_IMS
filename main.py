@@ -1,9 +1,9 @@
-from ft_add_product import add_product
-from ft_update_product import update_product
-from ft_add_supplier import add_supplier
-from ft_place_order import place_order
-from ft_view_inventory import view_inventory
-from ft_generate_reports import generate_reports
+from functions.ft_add_product import add_product
+from functions.ft_update_product import update_product
+from functions.ft_add_supplier import add_supplier
+from functions.ft_place_order import place_order
+from functions.ft_view_inventory import view_inventory
+from functions.ft_generate_reports import generate_reports
 from termcolor import colored
 
 def main_menu():
