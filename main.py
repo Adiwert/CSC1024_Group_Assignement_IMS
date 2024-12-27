@@ -16,54 +16,57 @@ def format_name(name):
     return formatted_name
 
 # General helper function to get the next ID for any file
-def get_next_id(file_name, prefix):
+def get_next_id(file_name, prefix, column_index):
+    column_index = 0
     try:
         with open(file_name, "r") as f:
             lines = f.readlines()
         if len(lines) <= 2:
             return f'{prefix}0001'
         
-        last_line = lines[-1]
-        last_id = last_line.split(", ")[0].strip()
-        
-        if last_id.startswith(prefix) and len(last_id[1:]) == 4 and last_id[1:].isdigit():
-            last_numeric_id = int(last_id[1:])
-            next_id = f'{prefix}{last_numeric_id + 1:04d}'
-            return next_id
-        else:
-            raise ValueError(f"Invalid ID format: {last_id}")
-    
+        for line in reversed(line[2:]):
+            columns = [column.strip() for column in line.split(", ")]
+            last_id = columns[column_index]
+            # Skip if ID is '0'
+            if last_id == '0':
+                continue
+            if last_id.startswith(prefix) and len(last_id[1:]) == 4 and last_id[1:].isdigit():
+                last_numeric_id = int(last_id[1:])
+                next_id = f'{prefix}{last_numeric_id + 1:04d}'
+                return next_id
+        # If no valid ID is found, return the first ID
+        return f'{prefix}0001'
     # If the file does not exist, return the prefix followed by 0001
     except FileNotFoundError:
         return f'{prefix}0001'
     
 def valid_suppliers(filename='suppliers.txt'):
-    valid_suppliers_ids = []
+    valid_supplier_ids = []
     try:
         with open(filename, "r") as f:
             suppliers = f.readlines()[2:]
         for supplier in suppliers:
             supplier_info = [item.strip() for item in supplier.split(", ")]
-            valid_suppliers_ids.append(supplier_info[0])
+            valid_supplier_ids.append(supplier_info[0])
             print(f"{supplier_info[0]} - {supplier_info[1]}")
     except FileNotFoundError:
         print("No suppliers found.")
     
-    return valid_suppliers_ids
+    return valid_supplier_ids
 
 def valid_products(filename='products.txt'):
-    valid_products_ids = []
+    valid_product_ids = []
     try:
         with open(filename, "r") as f:
             products = f.readlines()[2:]
         for product in products:
             product_info = [item.strip() for item in product.split(", ")]
-            valid_products_ids.append(product_info[0])
+            valid_product_ids.append(product_info[0])
             print(f"{product_info[0]} - {product_info[1]}")
     except FileNotFoundError:
         print("No products found.")
         
-    return valid_products_ids
+    return valid_product_ids
 
 # Defines the `add_product` function to add new products to an inventory management system.
 def add_product():
@@ -89,7 +92,7 @@ def add_product():
 
     print('Enter product details or "quit" to exit: ')
     
-    product_id = get_next_id('products.txt', 'P')
+    product_id = get_next_id('products.txt', 'P', 0)
     print(f"Product ID: {product_id}")
     
     while True:
@@ -118,6 +121,8 @@ def add_product():
             return None # Exit the function if the user enters "quit"
         try:
             product_quantity = int(product_quantity)
+            if product_quantity < 0:
+                raise ValueError
             break
         except ValueError:
             print("Invalid quantity input.")
@@ -128,6 +133,8 @@ def add_product():
             return None # Exit the function if the user enters "quit"
         try:
             product_import_price = f"{float(product_import_price):.2f}"
+            if product_import_price < 0:
+                raise ValueError
             break
         except ValueError:
             print("Invalid import price input.")
@@ -138,6 +145,8 @@ def add_product():
             return None # Exit the function if the user enters "quit"
         try:
             product_retail_price = f"{float(product_retail_price):.2f}"
+            if product_retail_price < 0:
+                raise ValueError
             break
         except ValueError:
             print("Invalid retail price input.")
@@ -255,6 +264,8 @@ def update_product():
                         break
                     if new_quantity:
                         product['Quantity'] = int(new_quantity)
+                        if product['Quantity'] < 0:
+                            raise ValueError
                         break
                 except ValueError:
                     print('Invalid quantity entered. Keeping the old quantity.')
@@ -268,6 +279,8 @@ def update_product():
                         break
                     if new_import_price:  
                         product['Import Price'] = f"{float(new_import_price):.2f}"
+                        if product['Import Price'] < 0:
+                            raise ValueError
                         break
                 except ValueError:
                     print('Invalid import price entered. Keeping the old import price.')
@@ -281,6 +294,8 @@ def update_product():
                         break
                     if new_retail_price:
                         product['Retail Price'] = f"{float(new_retail_price):.2f}"
+                        if product['Retail Price'] < 0:
+                            raise ValueError
                         break
                 except ValueError:
                     print('Invalid retail price entered. Keeping the old retail price.')
@@ -344,7 +359,7 @@ def add_supplier():
 
     print('Enter supplier details or "quit" to exit: ')
 
-    supplier_id = get_next_id('suppliers.txt', 'S')
+    supplier_id = get_next_id('suppliers.txt', 'S', 0)
     print(f"Supplier ID: {supplier_id}")
     
     while True:
@@ -399,124 +414,143 @@ def place_order():
     
     """)
     # Code to place an order
-    # Initialise products dictionary
-    products = {} # Initialise to hold data, the key is Product ID
-
-    # Load products from products.txt
-    with open('products.txt', 'r') as f:
-        for line in f.readlines()[1:]: # Skip header
-            product_data = line.strip().split(", ") # remove space and split content using ','
-            product_id = product_data[0]
-            product_name = product_data[1]
-            product_category = product_data[2]
-            quantity = product_data[3]
-            incoming_price = float(product_data[4])
-            selling_price = float(product_data[5])
-            supplier_id = product_data[6]
-            products[product_id] = {
-                'product_name': product_name,
-                'product_category': product_category,
-                'quantity': quantity,
-                'incoming_price': incoming_price,
-                'selling_price': selling_price,
-                'supplier_id': supplier_id
-            }
-
-    # Load existing orders from orders.txt
-    orders = []
-    with open('orders.txt', 'r') as f:
-        orders = f.readlines()
+    
+    # Check if the orders.txt exists and create it if not
+    try:
+        with open('orders.txt', 'r') as f:
+            lines = f.readlines()
+            file_exists = bool(lines)
+    except FileNotFoundError:
+        file_exists = False
+    
+    if not file_exists:
+        with open('orders.txt', 'w') as f:
+            table_header = f"{'OutgoingOrderID':<15}, {'IncomingOrderID':<15}, {'ProductID':<10}, {'ImportPrice':<12}, {'RetailPrice':<12}, {'OrderStatus':<12}, {'SupplierID':<10}, {'OrderDate':<10}\n\n"
+            f.write(table_header)
 
     # Display mini menu for order type
-    print("Welcome to Order Management System!")
-    print("Please choose your order type: ")
-    print("1 Place Order to Supplier (Add stock)")
-    print("2 Place Order by Customer (Sell product)")
-    order_type_choice = input("Option (1 or 2): ").strip()
-
-    # check input response
-    if order_type_choice == '1':
-        order_type = 'supplier'
-    elif order_type_choice == '2':
-        order_type = 'customer'
-    else:
-        print("Invalid choice.")
-        return
+    while True:
+        print("\nMini Menu for Placing Order")
+        print("[1] Place Order to Supplier (Add stock)")
+        print("[2] Place Order from Customer (Sell product)")
+        print("[3] Back to Main Menu")
     
-    # Get product information
-    print("Available products:")
-    for product_id, details in products.items():
-        print(f"Product ID: {product_id}, Product Name: {details['product_name']}, Quantity: {details['quantity']}, "
-              f"Category: {details['product_category']}, Incoming Price: {details['incoming_price']}, "
-              f"Selling Price: {details['selling_price']}")
+        choice = input("\nEnter your choice (1-3): ").strip()
+        if choice == '3':
+            return None
+        if choice not in ['1', '2']:
+            print("Invalid choice. Please try again.")
+            continue
+            
+        print("\nAvailable Products:")
+        valid_product_ids = valid_products()
+        if not valid_product_ids:
+            print("No valid products found. Please add products first.")
+            return None
         
-    # Prompt to enter Product ID
-    product_id = input("Enter Product ID: ").strip()
-
-    # Check if Product ID exists
-    if product_id not in products:
-        print("Invalid Product ID. Exiting...")
-        return
+        while True:
+            product_id = input("\nEnter Product ID: ").strip()
+            if product_id.lower() == 'quit':
+                return None
+            if product_id.strip() in [valid_id.strip() for valid_id in valid_product_ids]:
+                break
+            else:
+                print("Invalid Product ID. Please try again.")
+        
+        while True:
+            try:
+                quantity = input("Enter incoming or outgoing quantity: ").strip()
+                if quantity.lower() == 'quit':
+                    return None
+                quantity = int(quantity)
+                if quantity <= 0:
+                    raise ValueError
+                break
+            except ValueError:
+                print("Invalid quantity. Please enter a positive integer.")
+        
+        if choice == '1':
+            outgoing_order_id = '0'
+            incoming_order_id = get_next_id('orders.txt', 'I', 1)
+            
+            print("\nAvailable Suppliers:")
+            valid_supplier_ids = valid_suppliers()
+            while True:
+                supplier_id = input("\nEnter Supplier ID: ").strip()
+                if supplier_id.lower() == 'quit':
+                    return None
+                if supplier_id.strip() in [valid_id.strip() for valid_id in valid_supplier_ids]:
+                    break
+                else:
+                    print("Invalid Supplier ID. Please try again.")
+            
+            with open('products.txt', 'r') as f:
+                products = f.readlines()
+                for product in products:
+                    if product.strip():
+                        fields = [item.strip() for item in product.split(", ")]
+                        if fields[0] == product_id:
+                            import_price = float(fields[4])
+                            retail_price = 0 # Not applicable for supplier orders
+                            break
+            
+            order_status = f"+{quantity}"
+        
+        elif choice == '2':
+            outgoing_order_id = get_next_id('orders.txt', 'O', 0)
+            incoming_order_id = '0'
+            
+            with open('products.txt', 'r') as f:
+                products = f.readlines()
+                for product in products:
+                    if product.strip():
+                        fields = [item.strip() for item in product.split(", ")]
+                        if fields[0] == product_id:
+                            import_price = 0 # Not applicable for supplier orders
+                            retail_price = float(fields[5])
+                            break
+                        
+            order_status = f"-{quantity}"
     
-    # Prompt to enter quantity
-    quantity = input("Enter quantity: ").strip()
-    if not quantity.isdigit() or int(quantity) <= 0:
-        print("Invalid quantity. Exiting...")
-        return
-    quantity = int(quantity)
-
-    # Generate Order ID
-    order_prefix = 'O' if order_type == 'customer' else 'I'
-    order_id_prefix = f"{order_prefix}0000"
-
-    # Check the last ID
-    last_order_id = 0
-    for order in orders:
-        if order.startswith(order_id_prefix):
-            order_number = int(order[1:])
-            if order_number > last_order_id:
-                last_order_id = order_number
-    
-    new_order_id = last_order_id + 1
-    new_order_id = f"{order_prefix}{new_order_id:04d}"
-
-    # Get current date (format DD-MM-YYYY)
-    order_date = datetime.datetime.now().strftime("%d-%m-#y")
-
-    # Determine status and prices based on order type
-    if order_type == 'supplier':
-        status = f"+{quantity}" # Add stock
-        incoming_price = products[product_id]['incoming_price'] * quantity
-        selling_price = 0 # Not relevant
-        supplier_id = input("Enter Supplier ID: ").strip()
-    else:
-        status = f"-{quantity}" # Sell product
-        incoming_price = 0 # Not relevant
-        selling_price = products[product_id]['selling_price'] * quantity
-        supplier_id = '' # Not relevant
-
-    # Prepare order data for the file
-    order_data = f"{new_order_id}, {product_id}, {incoming_price:.2f}, {selling_price:.2f}, {status}, {supplier_id}, {order_date}\n"
-
-    # Append new order to orders.txt
-    with open('orders.txt', 'a') as f:
-        f.write(order_data)
-    
-    # Update quantity in products.txt
-    if order_type == 'supplier':
-        products[product_id]['quantity'] += quantity
-    else:
-        products[product_id]['quantity'] -= quantity
-
-    # Rewrite updated product data to products.txt
-    with open('products.txt', 'w') as f:
-        f.write("Product ID, Product Name, Product Category, Quantity, Incoming Price, Selling Price, Supplier ID\n")
-        for product_id, details in products.items():
-            product_line = f"{product_id}, {details['product_name']}, {details['product_category']}, {details['quantity']}, {details['incoming_price']:.2f}, {details['selling_price']:.2f}, {details['supplier_id']}\n"
-            f.write(product_line)
-
-    # Display update message
-    print(f"Order {new_order_id} placed successfully!")
+        order_date = datetime.datetime.now().strftime("%d-%m-%Y")
+        
+        with open('orders.txt', 'a') as f:
+            table = f"{outgoing_order_id:<15}, {incoming_order_id:<15}, {product_id:<10}, {import_price:<12}, {retail_price:<12}, {order_status:<10}, {quantity:<10}, {order_date:<10}\n"
+            f.write(table)
+        
+        updated_products_with_new_quantity = []
+        with open('products.txt', 'r') as f:
+            header = f.readline()
+            blank_line = f.readline()
+            for line in f:
+                fields = [item.strip() for item in line.split(", ")]
+                if fields[0] == product_id:
+                    current_quantity = int(fields[3])
+                    if choice == '1':
+                        new_quantity = current_quantity + quantity
+                    elif choice == '2':
+                        new_quantity = current_quantity - quantity
+                    fields[3] = int(new_quantity)
+                updated_products_with_new_quantity.append(fields)
+        
+        with open('products.txt', 'w') as f:
+            f.write(header)
+            f.write(blank_line)
+            for product in updated_products_with_new_quantity:
+                table = f"{product[0]:<10}, {product[1]:<25}, {product[2]:<15}, {product[3]:<15}, {product[4]:<20}, {product[5]:<20}, {product[6]:<10}\n"
+                f.write(table)
+        
+        if choice == '1':
+            order_id = incoming_order_id
+            quantity_change = f"increased by {quantity}"
+        elif choice == '2':
+            order_id = outgoing_order_id
+            quantity_change = f"decreased by {quantity}"
+        
+        print(f"\nOrder {order_id} has been placed successfully!")
+        print(f"Quantity of {product_id} has been {quantity_change}.")
+        
+        break
 
 def view_inventory():
     print(r"""
@@ -676,15 +710,15 @@ def main_menu():
     """)
     while True:
         print("\nMain Menu")
-        print("1. Add a New Product")
-        print("2. Update Product Details")
-        print("3. Add a New Supplier")
-        print("4. Place an Order")
-        print("5. View Inventory")
-        print("6. Generate Reports")
-        print("7. Exit")
+        print("[1] Add a New Product")
+        print("[2] Update Product Details")
+        print("[3] Add a New Supplier")
+        print("[4] Place an Order")
+        print("[5] View Inventory")
+        print("[6] Generate Reports")
+        print("[7] Exit")
 
-        choice = input("Enter your choice: ")
+        choice = input("Enter your choice (1-7): ")
         if choice == '1':
             add_product()
         elif choice == '2':
