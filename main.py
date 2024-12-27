@@ -1,5 +1,6 @@
 import datetime # Imports the datetime module to add date/time to details.
 from prettytable import PrettyTable # Imports the PrettyTable library for formatted table output.
+from termcolor import colored
 
 # Predefined food categories for the user to choose from
 PRODUCT_CATEGORIES = [
@@ -594,6 +595,8 @@ def view_inventory():
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
+
 def generate_reports():
     print(r"""
        ____                           _              ____                       _       
@@ -604,78 +607,143 @@ def generate_reports():
                                                               |_|                       
     """)
     # Code to generate reports
-    try:
-        with open("products.txt",'r') as file :
-            lines = file.readlines()
+    
+    while True:
+        print("\nSelect the type of report you want to generate:")
+        print("[1] Inventory Report")
+        print("[2] Sales Report")
+        print("[3] Expenses Report")
+        print("[4] Profit/Loss Summary")
+        print("[5] Back to Main Menu")
+        choice = input("Enter your choice (1-5): ").strip()
 
-            if len(lines) <=2: #checking the inventory
-                print("\nThe inventory is empty. Report are unable to be generated")
-                return 
+        if choice == '5':
+            return None
+        
+        try:
+            if choice == '1':
+                with open("products.txt",'r') as f:
+                    lines = f.readlines()
+                    if len(lines) <= 2:
+                        print(colored("\nThe inventory is empty. Report are unable to be generated", "red"))
+                        return 
 
-            total_product = 0
-            total_value = 0.0
-            low_stock = 20
-            low_stock = []
-            supplier_order = []
+                    LOW_STOCK_THRESHOLD = 20
+                    TARGET_STOCK_LEVEL = 50
+                    low_stock_items = []
+                    supplier_orders = []
 
-            table = PrettyTable()
-            table.field_names = ["Product ID","Product Name","Price","Quantity"]
+                    inventory_table = PrettyTable()
+                    headers = [header.strip() for header in lines[0].split(", ")]
+                    inventory_table.field_names = headers
 
+                    for line in lines[2:]:
+                        fields = [field.strip() for field in line.split(", ")]
+                        quantity = int(fields[3])
 
-            for line in lines[2:]:
-                    if line.strip():
-                        product_id = line[0:10].strip()
-                        product_name = line[10:30].strip()
-                        quantity = int(line[30:35].strip())
-                        price = float(line[35:45].strip())
-                        total_product += 1
-                        
-                        total_value += price * quantity
+                        if quantity <= LOW_STOCK_THRESHOLD:
+                            low_stock_items.append(fields)
+                            supplier_orders.append((fields[6], fields[1], TARGET_STOCK_LEVEL - quantity))
+                            colored_quantity = colored(fields[3], "red")
+                        else:
+                            colored_quantity = fields[3]
 
-                        table.add_row([product_id, product_name, quantity, f"${price:.2f}"])
+                        inventory_table.add_row([
+                            fields[0],
+                            fields[1],
+                            fields[2],
+                            colored_quantity,
+                            fields[4],
+                            fields[5],
+                            fields[6]
+                        ])
 
-                        if quantity < low_stock:
-                            low_stock.append(product_name)
-                            supplier_order.append ((product_name, low_stock - quantity))
+                    print("\n======================================================= Inventroy Report ========================================================\n")
+                    print(inventory_table)
 
-            print("\n-- Inventory Report --\n")
-            print(table)
-            print(f"The total products: {total_product}")
-            print(f"The total value of products: {total_value:.2f}")
+                    if low_stock_items:
+                        print("\n======================================================= Low Stock Items ========================================================\n")
+                        low_stock_table = PrettyTable()
+                        low_stock_table.field_names = ["ProductID", "ProductName", "Quantity"]
+                        for item in low_stock_items:
+                            low_stock_table.add_row([item[0], item[1], colored(item[3], "red")])
+                        print(low_stock_table)
 
-            if low_stock:
-                    print("\n-- Low Stock! --")
-                    print("The products that are low stock: ")
-                    for product in low_stock:
-                        print(f"-{product}")
+                    if supplier_orders:
+                        print("\n======================================================= Supplier Orders ========================================================\n")
+                        supplier_order_table = PrettyTable()
+                        supplier_order_table.field_names = ["SupplierID", "ProductName", "Quantity to Order"]
+                        for order in supplier_orders:
+                            supplier_order_table.add_row([order[0], order[1], order[2]])
+                        print(supplier_order_table)
 
-            if supplier_order :
-                    print("\n-- Supplier Order --")
-                    print("\n Products that need to be ordered:")
-                    for product, order_quantity in supplier_order:
-                        print(f" -{product}: Order {order_quantity} more units")
-
-        with open("order.txt","r") as order_file, open("supplier.txt","r") as supplier_file:
-            order_line = order_file.readlines()
-            supplier_lines = supplier_file.readlines()
-
-            total_sales = sum(float(line.strip().split()[1]) for line in order_line if line.strip())
-            total_supplier_cost = sum(float(line.strip().split()[1]) for line in supplier_lines if line.strip())
-
-            profit = total_sales - total_supplier_cost
-            print(f"\n-- The profit summary --")
-            print(f"Total sales : ${total_sales:.2f}")
-            print(f"Total supplier cost : ${total_supplier_cost:.2f}")
-            print(f"Profit : ${profit:.2f}")
-
-    except FileNotFoundError:
-                print("\nError: the product does not exist. Add the product first\n")
-
-    except FileNotFoundError:
-                print("Invalid input. Try again")
+            elif choice == "2":
+                with open("orders.txt", "r") as f:
+                    lines = f.readlines()
+            
+                total_sales = 0.00
+                sales_table = PrettyTable()
+                sales_table.field_names = ["OutgoingOrderID", "ProductID", "Quantity", "RetailPrice"]
                 
-    pass
+                for line in lines[2:]:
+                    fields = [field.strip() for field in line.split(", ")]
+                    if fields[0] != "0":
+                        total_sales += float(fields[4]) * abs(int(fields[5]))
+                        sales_table.add_row([fields[0], fields[2], fields[5], f"RM {float(fields[4]):.2f}"])
+                
+                print("\n======================================================= Sales Report ========================================================\n")
+                print(sales_table)
+                print(f"\nTotal Sales: RM {total_sales:.2f}\n")
+            
+            elif choice == "3":
+                with open("orders.txt", "r") as f:
+                    lines = f.readlines()
+                
+                total_expenses = 0.00
+                expense_table = PrettyTable()
+                expense_table.field_names = ["IncomingOrderID", "ProductID", "Quantity", "ImportPrice"]
+                
+                for line in lines[2:]:
+                    fields = [field.strip() for field in line.split(", ")]
+                    if fields[1] != "0":
+                        total_expenses += float(fields[3]) * abs(int(fields[5]))
+                        expense_table.add_row([fields[1], fields[2], fields[5], f"RM {float(fields[3]):.2f}"])
+                        
+                print("\n======================================================= Expenses Report ========================================================\n")
+                print(expense_table)
+                print(f"\nTotal Expenses: RM {total_expenses:.2f}\n")
+            
+            elif choice == "4":
+                with open("orders.txt", "r") as f:
+                    lines = f.readlines()
+                
+                total_sales = 0.00
+                total_expenses = 0.00
+                
+                for line in lines[2:]:
+                    fields = [field.strip() for field in line.split(", ")]
+                    if fields[0] != "0": # Outgoing order
+                        total_sales += float(fields[4]) * abs(int(fields[5]))
+                    elif fields[1] != "0": # Incoming order
+                        total_expenses += float(fields[3]) * abs(int(fields[5]))
+                
+                profit_or_loss = total_sales - total_expenses
+                if profit_or_loss >= 0:
+                    profit_color = "green"
+                elif profit_or_loss < 0:
+                    profit_color = "red"
+                
+                print(f"\n================================================== Profit/Loss Summary ===================================================\n")
+                print(colored(f"Net Profit/Loss: RM {profit_or_loss:.2f}", profit_color))
+                
+            else:
+                print(colored("Invalid choice. Please choose a valid option.", "red"))
+            
+        except FileNotFoundError:
+            print("\nError: the product does not exist. Add the product first\n")
 
+        except FileNotFoundError:
+            print("Invalid input. Try again")
 
 def main_menu():
     print(r"""                                                                                                                                                                                   
