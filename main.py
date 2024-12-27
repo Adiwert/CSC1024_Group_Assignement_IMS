@@ -542,6 +542,8 @@ def place_order():
         
         break
 
+
+
 def view_inventory():
     print(r"""
      __     ___                 ___                      _                   
@@ -558,16 +560,39 @@ def view_inventory():
             if len(lines) <= 2:
                 print("The inventory is currently empty. Add some products first")
                 return
+            
+            table = PrettyTable()
+            
+            headers = [header.strip() for header in lines[0].split(", ")]
+            table.field_names = headers
+            
+            for line in lines[2:]:
+                rows = [column.strip() for column in line.split(", ")]
+                rows[4] = f"RM {float(rows[4]):.2f}" # Import Price
+                rows[5] = f"RM {float(rows[5]):.2f}" # Retail Price
+                
+                table.add_row(rows)
+                
 
-            print("\n-- Inventroy List --\n")
-            for line in lines:
-                print(line, end="")
-            print("\n-------------------")
-
+            print("\n========== Inventroy List ==========\n")
+            print(table)
+            print("\nTotal Products:", len(lines) - 2) # Substract header and blank line
+            
+            total_value = 0.00
+            for line in lines[2:]:
+                if line.strip():
+                    fields = [field.strip() for field in line.split(", ")]
+                    product_quantity = int(fields[3])
+                    import_price = float(fields[4])
+                    total_value += product_quantity * import_price
+            
+            print(f"Total Inventory Value: RM {total_value:.2f}")
+            print("\n" + "=" * 40 + "\n")
+            
     except FileNotFoundError:
         print("\nError: The file does not exist. add product to create the file ")
-
-    pass
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def generate_reports():
     print(r"""
