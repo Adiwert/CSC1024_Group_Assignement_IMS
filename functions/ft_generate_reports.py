@@ -34,7 +34,7 @@ def generate_reports():
                     lines = f.readlines()
                     if len(lines) <= 2:
                         print(colored("\nThe inventory is empty. Report are unable to be generated", "red"))
-                        return   # Exit the function if no report can be generated
+                        return None  # Exit the function if no report can be generated
 
                     LOW_STOCK_THRESHOLD = 20  # Define the threshold for low stock
                     TARGET_STOCK_LEVEL = 50  # Define the target stock level
