@@ -1,22 +1,22 @@
 ProductID , ProductName              , ProductCategory, ProductQuantity, ProductImportPrice  , ProductRetailPrice  , SupplierID
 
-P0001     , Lubaba_Chocolate         , Snacks         , 300            , 4.5                 , 5.5                 , S0001     
+P0001     , Lubaba_Chocolate         , Snacks         , 180            , 4.5                 , 5.5                 , S0001     
 P0002     , PowerGan                 , Beverages      , 150            , 3.5                 , 4.0                 , S0002     
 P0003     , Yumz_Strawberry          , Fruits         , 45             , 10.5                , 11.5                , S0003     
-P0004     , Roti_Lazat_Nana          , Bakery         , 100            , 2.5                 , 3.0                 , S0004     
+P0004     , Roti_Lazat_Nana          , Bakery         , 30             , 2.5                 , 3.0                 , S0004     
 P0005     , Broccoli_Pahang          , Vegetables     , 10             , 4.5                 , 4.9                 , S0005     
-P0006     , ABZ_Seafood              , Seafood        , 100            , 15.5                , 17.5                , S0006     
+P0006     , ABZ_Seafood              , Seafood        , 120            , 15.5                , 17.5                , S0006     
 P0007     , CZY_Fresh_Corn           , Fruits         , 13             , 3.5                 , 4.0                 , S0007     
 P0008     , Whitey_Fruit_Scone       , Bakery         , 17             , 8.5                 , 10.0                , S0003     
-P0009     , Whitey_Ginger_Bread      , Bakery         , 150            , 4.5                 , 5.5                 , S0003     
-P0010     , Roze_Ice_Cream           , Snacks         , 40             , 4.5                 , 4.8                 , S0006     
-P0011     , Chocolate_Ice_Cream      , Snacks         , 40             , 5.5                 , 5.8                 , S0006     
+P0009     , Whitey_Ginger_Bread      , Bakery         , 15             , 4.5                 , 5.5                 , S0003     
+P0010     , Roze_Ice_Cream           , Snacks         , 130            , 4.5                 , 4.8                 , S0006     
+P0011     , Chocolate_Ice_Cream      , Snacks         , 21             , 5.5                 , 5.8                 , S0006     
 P0012     , Ahmet_Healthy_Grains     , Grains         , 30             , 45.5                , 50.5                , S0008     
 P0013     , Ahmet_Bakao_Rice         , Grains         , 15             , 25.5                , 30.5                , S0008     
-P0014     , Minnie_Waffle_Ice_Cream  , Snacks         , 40             , 6.5                 , 6.8                 , S0006     
-P0015     , Kura_Mura_Chicken_Nugget , Frozen         , 7              , 12.5                , 13.0                , S0009     
+P0014     , Minnie_Waffle_Ice_Cream  , Snacks         , 90             , 6.5                 , 6.8                 , S0006     
+P0015     , Kura_Mura_Chicken_Nugget , Frozen         , 87             , 12.5                , 13.0                , S0009     
 P0016     , Kura_Mura_Fish_Nugget    , Frozen         , 50             , 10.5                , 11.0                , S0009     
 P0017     , Kura_Mura_Crab_Stick     , Frozen         , 18             , 5.5                 , 6.0                 , S0009     
-P0018     , Yumz_Orange              , Fruits         , 20             , 6.5                 , 7.0                 , S0003     
-P0019     , Yumz_Kiwi                , Fruits         , 35             , 4.0                 , 4.5                 , S0003     
-P0020     , Finx_Energy_Drink        , Beverages      , 200            , 4.8                 , 5.2                 , S0001     
+P0018     , Yumz_Orange              , Fruits         , 200            , 6.5                 , 7.0                 , S0003     
+P0019     , Yumz_Kiwi                , Fruits         , 15             , 4.0                 , 4.5                 , S0003     
+P0020     , Finx_Energy_Drink        , Beverages      , 15             , 4.8                 , 5.2                 , S0001     
