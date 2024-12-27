@@ -3,7 +3,7 @@ from termcolor import colored
 
 # Predefined food categories for the user to choose from
 PRODUCT_CATEGORIES = [
-    "Dairy", "Fruits", "Vagetables", "Poultry", "Seafood", 
+    "Dairy", "Fruits", "Vegetables", "Poultry", "Seafood", 
     "Beverages", "Bakery", "Snacks", "Frozen", "Grains", "Others"
 ]
 
