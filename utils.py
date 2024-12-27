@@ -1,6 +1,12 @@
 import datetime
 from termcolor import colored
 
+# Predefined food categories for the user to choose from
+PRODUCT_CATEGORIES = [
+    "Dairy", "Fruits", "Vagetables", "Poultry", "Seafood", 
+    "Beverages", "Bakery", "Snacks", "Frozen", "Grains", "Others"
+]
+
 # Function to format names when append it into .txt files
 def format_name(name):
     words = name.split() # Splits the name into individual words.
