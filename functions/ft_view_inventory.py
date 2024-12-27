@@ -15,12 +15,11 @@ def view_inventory():
     """)
     try:
         # Attempt to open the "products.txt" file for reading
-        with open("products.txt",'r') as file:
-            lines = file.readlines()
-
+        with open("products.txt",'r') as f:
+            lines = f.readlines()
             if len(lines) <= 2:
                 print(colored("The inventory is currently empty. Add some products first", "red"))
-                return
+                return None
             
             # Create a PrettyTable object to display data in a table format
             table = PrettyTable()
@@ -57,7 +56,7 @@ def view_inventory():
     
     # Handle the case where the file does not exist
     except FileNotFoundError:
-        print(colored("\nError: The file does not exist. add product to create the file.", "red"))
+        print(colored("\nError: The file does not exist. Add product to create the file.", "red"))
     # Handle any unexpected errors and display the error message
     except Exception as e:
         print(colored(f"An error occurred: {e}", "red"))

@@ -67,6 +67,6 @@ def valid_products(filename='products.txt'):
             valid_product_ids.append(product_info[0])  # Add the product ID to the list
             print(f"{product_info[0]} - {product_info[1]}")  # Print the product ID and name
     except FileNotFoundError:
-        print(colored("No products found. Add products first.", "red")) # Print an error message if the file doesn't exist
+        print(colored("No products found. Add products first.", "red"))  # Print an error message if the file doesn't exist
         
     return valid_product_ids

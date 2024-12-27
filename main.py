@@ -60,7 +60,7 @@ def main_menu():
     # Infinite loop to show the main menu until the user exits
     while True:
         # Displaying the main menu options
-        print("\nMain Menu")
+        print("\n====== Main Menu ======")
         print("[1] Add a New Product")
         print("[2] Update Product Details")
         print("[3] Add a New Supplier")
@@ -70,7 +70,7 @@ def main_menu():
         print("[7] Exit")
 
         # Taking input for menu choice
-        choice = input("Enter your choice (1-7): ")
+        choice = input("Enter your choice (1-7): ").strip()
         # Calling the respective function based on the user's choice
         if choice == '1':
             add_product()  # Add a new product
