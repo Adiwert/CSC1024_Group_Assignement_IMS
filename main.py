@@ -439,23 +439,23 @@ def place_order():
         if choice == '3':
             return None
         if choice not in ['1', '2']:
-            print("Invalid choice. Please try again.")
+            print(colored("Invalid choice. Please try again.", "red"))
             continue
             
-        print("\nAvailable Products:")
+        print(colored("\nAvailable Products:", "cyan"))
         valid_product_ids = valid_products()
         if not valid_product_ids:
-            print("No valid products found. Please add products first.")
+            print(colored("No valid products found. Please add products first.", "red"))
             return None
         
         while True:
             product_id = input("\nEnter Product ID: ").strip()
             if product_id.lower() == 'quit':
                 return None
-            if product_id.strip() in [valid_id.strip() for valid_id in valid_product_ids]:
+            if product_id.strip() in valid_product_ids:
                 break
             else:
-                print("Invalid Product ID. Please try again.")
+                print(colored("Invalid Product ID. Please try again.", "red"))
         
         while True:
             try:
@@ -480,7 +480,7 @@ def place_order():
                         fields = [item.strip() for item in product.split(", ")]
                         if fields[0] == product_id:
                             import_price = f"{float(fields[4]):.2f}"
-                            retail_price = 0 # Not applicable for supplier orders
+                            retail_price = 0.00 # Not applicable for supplier orders
                             supplier_id = fields[6]
                             break
             
@@ -496,7 +496,7 @@ def place_order():
                     if product.strip():
                         fields = [item.strip() for item in product.split(", ")]
                         if fields[0] == product_id:
-                            import_price = 0 # Not applicable for supplier orders
+                            import_price = 0.00 # Not applicable for supplier orders
                             retail_price = f"{float(fields[5]):.2f}"
                             supplier_id = '0'
                             break

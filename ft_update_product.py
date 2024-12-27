@@ -128,7 +128,7 @@ def update_product():
                 except ValueError:
                     print(colored("Invalid retail price entered. Keeping the old price.", "red"))
 
-            print(coloered("\nAvailable Suppliers:", "cyan"))
+            print(colored("\nAvailable Suppliers:", "cyan"))
             valid_supplier_ids = valid_suppliers()
             while True:
                 try:
