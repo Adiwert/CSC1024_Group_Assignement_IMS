@@ -574,7 +574,7 @@ def view_inventory():
                 table.add_row(rows)
                 
 
-            print("\n========== Inventroy List ==========\n")
+            print("\n========================================================= Inventroy List ==========================================================\n")
             print(table)
             print("\nTotal Products:", len(lines) - 2) # Substract header and blank line
             
@@ -587,7 +587,7 @@ def view_inventory():
                     total_value += product_quantity * import_price
             
             print(f"Total Inventory Value: RM {total_value:.2f}")
-            print("\n" + "=" * 40 + "\n")
+            print("\n" + "=" * 132 + "\n")
             
     except FileNotFoundError:
         print("\nError: The file does not exist. add product to create the file ")
