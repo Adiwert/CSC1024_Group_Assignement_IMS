@@ -1,4 +1,4 @@
-from utils import PRODUCT_CATEGORIES, valid_products, get_next_id
+from utils import valid_products, get_next_id
 from termcolor import colored
 import datetime
 

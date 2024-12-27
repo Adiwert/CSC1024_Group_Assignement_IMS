@@ -36,7 +36,7 @@ def add_product():
             break
     
     while True:
-        print("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others")
+        print(colored("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others", "cyan"))
         product_category = input('Product Category: ').strip().capitalize()
         if product_category.lower() == 'quit':
             return None # Exit the function if the user enters "quit"
@@ -101,4 +101,5 @@ def add_product():
     with open('products.txt', 'a') as f:
         table = f"{product_id:<10}, {formatted_name:<25}, {product_category:<15}, {product_quantity:<15}, {product_import_price:<20}, {product_retail_price:<20}, {supplier_id:<10}\n"
         f.write(table)
+    
     print(colored(f"{formatted_name} with ID {product_id} has been added.", "green"))

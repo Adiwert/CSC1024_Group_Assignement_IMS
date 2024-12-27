@@ -69,7 +69,7 @@ def update_product():
                 break
 
             while True:
-                print("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others")
+                print(colored("Available Categories: Dairy, Fruits, Vegetables, Poultry, Seafood, Beverages, Bakery, Snacks, Frozen, Grains, Others", "cyan"))
                 new_category = input('Enter new Product Category (Press "Enter" if no updates): ').strip().capitalize()
                 if new_category.lower() == 'quit':
                     return None
