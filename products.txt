@@ -1,6 +1,6 @@
 ProductID , ProductName              , ProductCategory, ProductQuantity, ProductImportPrice  , ProductRetailPrice  , SupplierID
 
-P0001     , Lubaba_Chocolate         , Snacks         , 200            , 4.5                 , 5.5                 , S0001     
+P0001     , Lubaba_Chocolate         , Snacks         , 300            , 4.5                 , 5.5                 , S0001     
 P0002     , PowerGan                 , Beverages      , 250            , 3.5                 , 4.0                 , S0002     
 P0003     , Yumz_Strawberry          , Fruits         , 340            , 10.5                , 11.5                , S0003     
 P0004     , Roti_Lazat_Nana          , Bakery         , 100            , 2.5                 , 3.0                 , S0004     

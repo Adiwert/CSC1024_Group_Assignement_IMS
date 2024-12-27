@@ -17,14 +17,13 @@ def format_name(name):
 
 # General helper function to get the next ID for any file
 def get_next_id(file_name, prefix, column_index):
-    column_index = 0
     try:
         with open(file_name, "r") as f:
             lines = f.readlines()
         if len(lines) <= 2:
             return f'{prefix}0001'
         
-        for line in reversed(line[2:]):
+        for line in reversed(lines[2:]):
             columns = [column.strip() for column in line.split(", ")]
             last_id = columns[column_index]
             # Skip if ID is '0'
@@ -430,7 +429,7 @@ def place_order():
 
     # Display mini menu for order type
     while True:
-        print("\nMini Menu for Placing Order")
+        print("Mini Menu for Placing Order")
         print("[1] Place Order to Supplier (Add stock)")
         print("[2] Place Order from Customer (Sell product)")
         print("[3] Back to Main Menu")
@@ -473,25 +472,15 @@ def place_order():
             outgoing_order_id = '0'
             incoming_order_id = get_next_id('orders.txt', 'I', 1)
             
-            print("\nAvailable Suppliers:")
-            valid_supplier_ids = valid_suppliers()
-            while True:
-                supplier_id = input("\nEnter Supplier ID: ").strip()
-                if supplier_id.lower() == 'quit':
-                    return None
-                if supplier_id.strip() in [valid_id.strip() for valid_id in valid_supplier_ids]:
-                    break
-                else:
-                    print("Invalid Supplier ID. Please try again.")
-            
             with open('products.txt', 'r') as f:
                 products = f.readlines()
                 for product in products:
                     if product.strip():
                         fields = [item.strip() for item in product.split(", ")]
                         if fields[0] == product_id:
-                            import_price = float(fields[4])
+                            import_price = f"{float(fields[4]):.2f}"
                             retail_price = 0 # Not applicable for supplier orders
+                            supplier_id = fields[6]
                             break
             
             order_status = f"+{quantity}"
@@ -507,15 +496,16 @@ def place_order():
                         fields = [item.strip() for item in product.split(", ")]
                         if fields[0] == product_id:
                             import_price = 0 # Not applicable for supplier orders
-                            retail_price = float(fields[5])
+                            retail_price = f"{float(fields[5]):.2f}"
+                            supplier_id = '0'
                             break
                         
             order_status = f"-{quantity}"
     
-        order_date = datetime.datetime.now().strftime("%d-%m-%Y")
+        order_date = datetime.datetime.now().strftime("%d/%m/%Y")
         
         with open('orders.txt', 'a') as f:
-            table = f"{outgoing_order_id:<15}, {incoming_order_id:<15}, {product_id:<10}, {import_price:<12}, {retail_price:<12}, {order_status:<10}, {quantity:<10}, {order_date:<10}\n"
+            table = f"{outgoing_order_id:<15}, {incoming_order_id:<15}, {product_id:<10}, {import_price:<12}, {retail_price:<12}, {order_status:<12}, {supplier_id:<10}, {order_date:<10}\n"
             f.write(table)
         
         updated_products_with_new_quantity = []
