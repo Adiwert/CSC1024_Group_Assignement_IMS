@@ -20,6 +20,13 @@ Development of Personal Inventory Management System using Python
 
 To start, make sure you have [Git](https://git-scm.com/) installed on your computer. You do not need to install the GitHub Desktop app.
 
+At the same time, make sure you have installed PrettyTable and termcolor on your IDE.
+Run:
+```
+pip install prettytable
+pip install termcolor
+```
+
 ### Cloning the Repo
 
 Find a suitable folder you want your project in and clone the repo by running:

@@ -18,7 +18,7 @@ def place_order():
 
 def view_inventory():
     try:
-        with open("products.txt",'r') as file:
+        with open("product.txt",'r') as file:
             lines = file.readlines()
 
             if len(lines) <= 2:
@@ -35,77 +35,28 @@ def view_inventory():
 
     pass
 
-
-from prettytable import PrettyTable
-
 def generate_reports():
     # Code to generate reports
     try:
-        with open("products.txt",'r') as file :
+        with open("product.txt",'r') as file :
             lines = file.readlines()
 
-            if len(lines) <=2: #checking the inventory
+            if len(lines) <=2:
                 print("\nThe inventory is empty. Report are unable to be generated")
-                return 
+                return
 
-            total_product = 0
-            total_value = 0.0
-            low_stock = 20
-            low_stock = []
-            supplier_order = []
+                total_product = 0
+                total_value = 0.0
 
-            table = PrettyTable()
-            table.field_names = ["Product ID","Product Name","Price","Quantity"]
-
-
-            for line in lines[2:]:
+                for line in lines[2:]:
                     if line.strip():
-                        product_id = line[0:10].strip()
-                        product_name = line[10:30].strip()
-                        quantity = int(line[30:35].strip())
-                        price = float(line[35:45].strip())
                         total_product += 1
-                        
-                        total_value += price * quantity
+                        price = float(line[30:40].strip())
+                        total_value += price
 
-                        table.add_row([product_id, product_name, quantity, f"${price:.2f}"])
-
-                        if quantity < low_stock:
-                            low_stock.append(product_name)
-                            supplier_order.append ((product_name, low_stock - quantity))
-
-            print("\n-- Inventory Report --\n")
-            print(table)
-            print(f"The total products: {total_product}")
-            print(f"The total value of products: {total_value:.2f}")
-
-            if low_stock:
-                    print("\n-- Low Stock! --")
-                    print("The products that are low stock: ")
-                    for product in low_stock:
-                        print(f"-{product}")
-
-            if supplier_order :
-                    print("\n-- Supplier Order --")
-                    print("\n Products that need to be ordered:")
-                    for product, order_quantity in supplier_order:
-                        print(f" -{product}: Order {order_quantity} more units")
-
-        with open("order.txt","r") as order_file, open("supplier.txt","r") as supplier_file:
-            order_line = order_file.readlines()
-            supplier_lines = supplier_file.readlines()
-
-            total_sales = sum(float(line.strip().split()[1]) for line in order_line if line.strip())
-            total_supplier_cost = sum(float(line.strip().split()[1]) for line in supplier_lines if line.strip())
-
-            profit = total_sales - total_supplier_cost
-            print(f"\n-- The profit summary --")
-            print(f"Total sales : ${total_sales:.2f}")
-            print(f"Total supplier cost : ${total_supplier_cost:.2f}")
-            print(f"Profit : ${profit:.2f}")
-            
-
-
+                print("\n-- Inventory Report --\n")
+                print(f"The total products: {total_product}")
+                print(f"The total value of products: {total_value:.2f}")
            
     except FileNotFoundError:
                 print("\nError: the product does not exist. Add the product first\n")
@@ -116,31 +67,91 @@ def generate_reports():
     pass
 
 def main_menu():
+    # Printing a large header in blue color
+    print(colored("""                                                                                                                                                                                   
+                                ██████████████████████████████████████████████████████                                                                  
+                                █████████████        ████████████         ████████████                                                                  
+                                █████████████████████████████████    █████████████████                                                                  
+                                   █████████████        █████████████          █████████████                                                                
+                             ██████████████         ██████████████          █████████████                                                               
+                            ██████████████          ██████████████           ██████████████                                                             
+                          ███████████████          ███████████████            ███████████████                                                           
+                        ████████████████           ████████████████            ███████████████                                                          
+                       ███████████████████████████████████████████████   ████  █████████████████                                                        
+                       ████████████████            ████████████████             ████████████████                                                        
+                       ██  ████████████            ████████████████             ████████████████                                                        
+                       ██  ████████████            ████████████████             ███████████████      █████████                                          
+                       ███  ████████████          ██████████████████           ████████████████    ████████████                                         
+                        ████  █  ████ ████      ███  █████████████ ██        ███ █████████████    ███  █████████                                        
+                          █████████     █████████      █████████     █████████     █████████      ███ ███████████                                       
+                          ██                                                              ██     ████  ██████████                                       
+                          ██████████████████████████████████████████████████████████████████    ███   █████████████                                     
+                          ██████████████      ████████          ██████████    ██████████████   ███  ███████████████                                     
+                          ██                   ███████          ██   ███         ████     ██  ██████████████████████                                    
+                          ██   █              ████████          ██  ██             █████████  ███  █████████████████                                    
+                            ██              ███████ ██          ████              ███████ ██  ███ ██████████████████                                    
+                          ██              ███████   ██          ██              ███████   ██   █████████████████████                                    
+                          ██             ██████     ██          ██            ███████     ██    ███████████████████                                     
+                          ██           ██████      ███          ██           ██████     ████     █████████████████                                      
+                          ██         ██████      █████          ██         ██████      █████       █████████████                                        
+                          ███  ███████████████████████          ███  ██████████████████████           █████                                            
+                          ██                        ██          ██                        ██            ██                                              
+        ████ ███ ████     ██                        ██          ██                        ██            ██                                              
+        █ ████ ███ ██     ██                        ██          ██                        ██            ██                                              
+        █ ████ ███ ███████████████████████████████████████████████████████████████████████████████████████                                            
+    ___________________________________________________________________________________________________________________
+                                      ___                      _                   
+                                     |_ _|_ ____   _____ _ __ | |_ ___  _ __ _   _ 
+                                      | || '_ \ \ / / _ \ '_ \| __/ _ \| '__| | | |
+                                      | || | | \ V /  __/ | | | || (_) | |  | |_| |
+                                     |___|_| |_|\_/ \___|_| |_|\__\___/|_|   \__, |
+                                        __  __                               |___/ 
+                                       |  \/  | __ _ _ __   __ _  __ _  ___ _ __     
+                                       | |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|    
+                                       | |  | | (_| | | | | (_| | (_| |  __/ |       
+                                       |_|  |_|\__,_|_| |_|\__,_|\__, |\___|_|       
+                                                                 |___/        
+    ____________________________________________________________________________________________________________________
+    """, "blue"))
+    
+    # Infinite loop to show the main menu until the user exits
     while True:
-        print("\nInventory Management System")
-        print("1. Add a New Product")
-        print("2. Update Product Details")
-        print("3. Add a New Supplier")
-        print("4. Place an Order")
-        print("5. View Inventory")
-        print("6. Generate Reports")
-        print("7. Exit")
+        # Displaying the main menu options
+        print("\n====== Main Menu ======")
+        print("[1] Add a New Product")
+        print("[2] Update Product Details")
+        print("[3] Add a New Supplier")
+        print("[4] Place an Order")
+        print("[5] View Inventory")
+        print("[6] Generate Reports")
+        print("[7] Exit")
 
-        choice = input("Enter your choice: ")
+        # Taking input for menu choice
+        choice = input("Enter your choice (1-7): ").strip()
+        # Calling the respective function based on the user's choice
         if choice == '1':
-            add_product()
+            add_product()  # Add a new product
         elif choice == '2':
-            update_product()
+            update_product()  # Update existing product details
         elif choice == '3':
-            add_supplier()
+            add_supplier()  # Add a new supplier
         elif choice == '4':
-            place_order()
+            place_order()  # Place a new order
         elif choice == '5':
-            view_inventory()
+            view_inventory()  # View the current inventory
         elif choice == '6':
-            generate_reports()
+            generate_reports()  # Generate reports
         elif choice == '7':
-            print("Exiting program...")
-            break
+            # Printing a message and exiting the program
+            print(r"""
+                  ____             __   __               _               _       _ 
+                 / ___|  ___  ___  \ \ / /__  _   _     / \   __ _  __ _(_)_ __ | |
+                 \___ \ / _ \/ _ \  \ V / _ \| | | |   / _ \ / _` |/ _` | | '_ \| |
+                  ___) |  __/  __/   | | (_) | |_| |  / ___ \ (_| | (_| | | | | |_|
+                 |____/ \___|\___|   |_|\___/ \__,_| /_/   \_\__, |\__,_|_|_| |_(_)
+                                                             |___/                 
+            """)
+            break  # Exits the infinite loop and ends the program
         else:
             print("Invalid choice. Please try again.")
+            print("Hello world!")
