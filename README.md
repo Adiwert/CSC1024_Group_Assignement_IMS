@@ -13,6 +13,7 @@ Development of Personal Inventory Management System using Python
     - [Switching Back to Main Branch](#switching-back-to-main-branch)
     - [Opening a Pull Request](#opening-a-pull-request)
     - [Merge Changes from Main Branch to Your Own Branch](#merge-changes-from-main-branch-to-your-own-branch)
+  - [Run the Program](#run-the-program)
   - [Comments](#comments)
   - [Error Handling](#error-handling)
 
@@ -98,6 +99,12 @@ git commit -m "<your-message-here>"
 git push
 ```
 You should see all the change you made in your branch on GitHub now.
+
+## Run the Program
+To run the program, you can use the following command in the terminal after you have navigated to the GitHub repository folder with file 'main.py':
+```
+python main.py
+```
 
 ## Comments
 
