@@ -35,10 +35,10 @@ def update_product():
 
     except FileNotFoundError:
         print(colored("No products file found. Please add products first.", "red"))
-        return  # Exit the function if the file is not found
+        return None  # Exit the function if the file is not found
     except IndexError:
         print(colored("Malformed data. Please check the file format.", "red"))
-        return  # Exit the function if the data format is incorrect
+        return None # Exit the function if the data format is incorrect
     
     print(colored("\nAvailable Products:", "cyan"))  # Print available products header in cyan
     valid_product_ids = valid_products()  # Get a list of valid product IDs
