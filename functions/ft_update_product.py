@@ -117,9 +117,10 @@ def update_product():
                     if new_import_price == '':
                         break
                     if new_import_price:  
-                        product['Import Price'] = f"{float(new_import_price):.2f}"  # Convert input to float and format to 2 decimal places
+                        product['Import Price'] = float(new_import_price)
                         if product['Import Price'] < 0:  # If the new price is negative, raise an error
                             raise ValueError
+                        product['Import Price'] = f"{new_import_price:.2f}" # Convert input to float and format to 2 decimal places
                         break  # Exit the loop once the import price is updated
                 except ValueError:
                     print(colored("Invalid import price entered. Please try again", "red"))
@@ -133,9 +134,10 @@ def update_product():
                     if new_retail_price == '':
                         break
                     if new_retail_price:
-                        product['Retail Price'] = f"{float(new_retail_price):.2f}"  # Convert input to float and format to 2 decimal places
+                        product['Retail Price'] = float(new_retail_price)
                         if product['Retail Price'] < 0:  # If the new price is negative, raise an error
                             raise ValueError
+                        product['Retail Price'] = f"{new_retail_price:.2f}"  # Convert input to float and format to 2 decimal places
                         break  # Exit the loop once the retail price is updated
                 except ValueError:
                     print(colored("Invalid retail price entered. Please try again.", "red"))
