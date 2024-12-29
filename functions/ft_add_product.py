@@ -76,9 +76,10 @@ def add_product():
         if product_import_price.lower() == 'quit':
             return None
         try:
-            product_import_price = f"{float(product_import_price):.2f}"
+            product_import_price = float(product_import_price)
             if product_import_price < 0:
                 raise ValueError  # Raise error if price is negative
+            product_import_price = f"{product_import_price:.2f}" # Ensure price is a float with 2 decimal places
             break
         except ValueError:
             print(colored("Invalid import price. Enter a valid number.", "red"))
@@ -89,9 +90,10 @@ def add_product():
         if product_retail_price.lower() == 'quit':
             return None
         try:
-            product_retail_price = f"{float(product_retail_price):.2f}" # Ensure price is a float with 2 decimal places
+            product_retail_price = float(product_retail_price)
             if product_retail_price < 0:
                 raise ValueError  # Raise error if price is negative
+            product_retail_price = f"{product_retail_price:.2f}"
             break
         except ValueError:
             print(colored("Invalid retail price. Enter a valid number.", "red"))
